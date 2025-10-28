@@ -14,3 +14,11 @@ Lower camel case
 - Style: para cambios de formato. 
 - Fix: para corrección de bugs.
 - Docs: para cambios en documentación. 
+
+# Instrucciones de instalación y configuración
+
+# Dependencias y cómo instalarlas
+
+# Comandos para ejecutar el proyecto 
+
+# Descripción breve del proyecto 
