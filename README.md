@@ -2,7 +2,7 @@
 ![Logo](imgs/logo.png)
 # Convenciones de nomenclatura: 
 Lower camel case
-# Formato de código:
+# Formato de código: test
 
 # Estrategia de branches:
 
