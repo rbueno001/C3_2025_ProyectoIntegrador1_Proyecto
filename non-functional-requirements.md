@@ -1,44 +1,25 @@
-# Requerimientos No Funcionales — Gestión Culinaria
+# Requerimientos no funcionales (cómo debe comportarse el sistema):
 
-## Rendimiento
-- RNF-01: Tiempo de respuesta de búsqueda ≤ 500 ms (P95).
-- RNF-02: Generación de lista de compras ≤ 3 s.
-- RNF-03: Soportar 100 usuarios concurrentes sin degradación.
+## Requerimientos de Rendimiento:
+- RNF-01: Las páginas principales (Inicio, Búsqueda, Detalle de receta) deben cargar en menos de 1 segundo en ambiente local.  
+- RNF-02: La generación de la lista de compras debe completarse en menos de 5 segundos.  
+- RNF-03: El sistema debe funcionar correctamente con hasta 30 usuarios concurrentes durante las pruebas.  
 
-## Disponibilidad
-- RNF-04: Uptime mensual ≥ 99.5 %.
-- RNF-05: Restauración del servicio ≤ 1 h tras caída.
-- RNF-06: Backup diario automático.
+## Requerimientos de Disponibilidad:
+- RNF-04: En caso de caída del sistema, este debe poder reiniciarse manualmente en un máximo de 10 minutos.  
+- RNF-05: Se debe realizar un respaldo semanal de la base de datos para evitar pérdida de información.  
 
-## Seguridad
-- RNF-07: Contraseñas cifradas con BCrypt/Argon2.
-- RNF-08: Expiración de sesión tras 15 min de inactividad.
-- RNF-09: Toda conexión mediante HTTPS.
-- RNF-10: Control de roles (RBAC).
-- RNF-11: Bloqueo tras 5 intentos fallidos.
+## Requerimientos de Seguridad:
+- RNF-06: Todo el tráfico del sistema debe utilizar HTTPS para proteger los datos transmitidos.  
+- RNF-07: Las contraseñas deben almacenarse mediante un algoritmo de hash seguro (BCrypt).  
+- RNF-08: Los roles de usuario (administrador, chef, usuario común) deben restringir correctamente las funciones y vistas a las que tienen acceso.  
 
-## Usabilidad y accesibilidad
-- RNF-12: Cumplir WCAG 2.1 AA.
-- RNF-13: Texto alternativo en imágenes.
-- RNF-14: Mensajes de error comprensibles.
-- RNF-15: Formularios navegables con teclado.
+## Requerimientos de Usabilidad y Accesibilidad:
+- RNF-09: Los formularios del sistema deben ser fáciles de usar, navegables con teclado y mostrar mensajes de error claros.  
+- RNF-10: Las imágenes deben tener texto alternativo y el contraste de colores debe permitir una lectura legible en toda la interfaz.  
 
-## Mantenibilidad
-- RNF-16: ESLint/Prettier obligatorios.
-- RNF-17: Cobertura de pruebas ≥ 70 %.
-- RNF-18: Registro de cambios por versión.
-- RNF-19: Actualización de dependencias por sprint.
+## Requerimientos de Mantenibilidad:
+- RNF-11: El proyecto debe implementar ESLint y Prettier para mantener un formato de código uniforme.  
+- RNF-12: Todo cambio en la rama `main` debe realizarse mediante Pull Request revisado por al menos un integrante del equipo.  
 
-## Escalabilidad
-- RNF-20: Soporte para despliegue Docker.
-- RNF-21: Soportar 500 usuarios activos mensuales.
-
-## Observabilidad
-- RNF-22: Logs detallados por usuario y acción.
-- RNF-23: Métricas básicas de rendimiento.
-- RNF-24: Alertas automáticas por errores críticos.
-
-## Portabilidad
-- RNF-25: Entorno Docker uniforme.
-- RNF-26: Configuración por variables de entorno.
-- RNF-27: Compatibilidad entre entornos (dev/test/prod).
+---
