@@ -20,7 +20,7 @@
 - **RF-11:** El sistema generará automáticamente una lista de compras a partir del menú semanal.
 - **RF-12:** El sistema validará los datos ingresados (campos obligatorios, formatos, etc.).
 - **RF-13:** El sistema pedirá confirmación antes de eliminar o modificar información importante.
-- **RF-21 (NUEVO):** La búsqueda incluirá filtros avanzados por ingredientes deseados y no deseados, requiriendo al menos 3 ingredientes mínimos.
+- **RF-21 (NUEVO):** La búsqueda incluirá filtros avanzados por ingredientes deseados y no deseados, permitiendo agregar múltiples ingredientes según preferencia del usuario sin mínimo requerido.
 - **RF-23 (NUEVO):** El sistema identificará el autor de cada receta y permitirá marcar si es original o inspirada/modificada de otra.
 
 ---
