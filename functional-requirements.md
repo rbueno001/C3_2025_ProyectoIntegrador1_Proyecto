@@ -16,13 +16,12 @@
 ---
 
 ## 2) Requerimientos de Proceso:
-- **RF-10:** El sistema permitirá crear versiones derivadas de recetas, manteniendo la atribución original.
+- **RF-10 (MOD):** El sistema permitirá crear versiones derivadas de recetas mediante un botón “Crear modificación”, manteniendo la atribución original y sin alterar la receta base.
 - **RF-11:** El sistema generará automáticamente una lista de compras a partir del menú semanal.
 - **RF-12:** El sistema validará los datos ingresados (campos obligatorios, formatos, etc.).
 - **RF-13:** El sistema pedirá confirmación antes de eliminar o modificar información importante.
 - **RF-21 (NUEVO):** La búsqueda incluirá filtros avanzados por ingredientes deseados y no deseados, requiriendo al menos 3 ingredientes mínimos.
 - **RF-23 (NUEVO):** El sistema identificará el autor de cada receta y permitirá marcar si es original o inspirada/modificada de otra.
-- **RF-26 (NUEVO):** El sistema permitirá que los usuarios creen una nueva receta personalizada a partir de una receta existente mediante un botón “Crear modificación”, sin alterar la receta original.
 
 ---
 
