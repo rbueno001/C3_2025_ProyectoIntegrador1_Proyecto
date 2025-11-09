@@ -11,7 +11,15 @@
 - Raquel revisa los requerimientos no funcionales. 
 - Ian revisa los requerimientos funcionales.
 - Ian ingresa los requerimientos a Jira.
-- Raquel revisa los requerimientos a Jira. 
+- Raquel revisa los requerimientos a Jira.
+- Raquel crea la minuta de aprobación. 
+- Ian revisa la minuta de aprobación.
+- Raquel crea el cuestionario menos técnico. 
+- Ian agrega y modifica requerimientos funcionales. 
+- Raquel revisa la modificación a los requerimientos funcionales y realiza correcciones.
+- Raquel modifica los teams-agreements.  
+- Ian revisa los teams-agreements modificados.  
+
 
 # Compartidas:
 - Cada miembro tiene que revisar lo que haya hecho el otro miembro.
