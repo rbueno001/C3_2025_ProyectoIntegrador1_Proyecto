@@ -1,3 +1,7 @@
+<!--Pagina de recetas llamada Gastro Works con bootstrap, pagina principal-->
+<!--Pagina de recetas llamada Gastro Works con bootstrap, colores predominantes son el vino-->
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +15,179 @@
 </head>
 
 <body>
+  
+   <!--navbar-->
+    <nav class="navbar navbar-expand-lg" style="background-color: #800000;">
+          <div class="container-fluid">
+                <a class="navbar-brand text-white" href="#">Gastro Works</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                 data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                 aria-label="Toggle navigation">
+                 <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                 <ul class="navbar-nav
+">
+                      <li class="nav-item">
+                           <a class="nav-link active text-white" aria-current="page" href="#">Inicio</a>
+                      </li>
+                      <li class="nav-item">
+                           <a class="nav-link text-white" href="#">Recetas</a>
+                      </li>
+                      <li class="nav-item">
+                           <a class="nav-link text-white" href="#">Sobre Nosotros</a>
+                      </li>
+                      <li class="nav-item">
+                           <a class="nav-link text-white" href="#">Contacto</a>
+                      </li>
+                    </ul>
+                </div>
+          </div>
+    </nav>
+
+    <!--carrousel para evento culinario con imagenes y titulo del sitio el HERO el carrousel tiene que ser pequeño y con un fondo de color blanco y la informacion al lado y que las imagenes tengan el mismo tamaño y bordes mas o menos redondos-->
+    <div class="container mt-4">
+        <div class="row align-items-center" style="background-color: #ffffff; border-radius: 10px; padding: 20px;">
+            <div class="col-md-6">
+                <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="/imgs/pexels-n-voitkevich-5426108.jpg w-100 rounded"
+                                alt="Evento 1">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/imgs/pexels-nicola-barts-7936678.jpgass="d-block w-100 rounded"
+                                alt="Evento 2">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/imgs/pexels-yuuilina-10254480.jpgass="d-block w-100 rounded"
+                                alt="Evento 3">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#eventCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#eventCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2>Bienvenidos a Gastro Works</h2>
+                <p>Descubre las mejores recetas y eventos culinarios con nosotros. ¡Únete a nuestra comunidad de amantes de la gastronomía!</p>
+            </div>
+        </div>
+    </div>
+    <!--categorias de recetas con cards pequeñas, recetas con pollo, recestas con pasta, arroz, carne de res, postres, desayunos, almuerzos, pescado, vegetales, carne de cerdo con sus respectivas imagenes del mismo tamaño -->
+    <div class="container mt-5">
+        <h3 class="mb-4">Categorías de Recetas</h3>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/imgs/pollo-curry-manzana_012ed92b_00535188_240223081823_900x900.jpg" class="card-img-top"
+                        alt="Recetas con Pollo">
+                    <div class="card-body">
+                        <h5 class="card-title">Recetas con Pollo</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/imgs/pasta-carbonara_4ed5f5b3_00535188_240223081823_900x900.jpg" class="card-img-top"
+                        alt="Recetas con Pasta">
+                    <div class="card-body">
+                        <h5 class="card-title">Recetas con Pasta</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/imgs/arroz-con-pollo_8c4f5b3a_00535188_240223081823_900x900.jpg" class="card-img-top"
+                        alt="Recetas con Arroz">
+                    <div class="card-body">
+                        <h5 class="card-title">Recetas con Arroz</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/imgs/carne-de-res-guisada_2b3f5b3c_00535188_240223081823_900x900.jpg" class="card-img-top"
+                        alt="Recetas con Carne de Res">
+                    <div class="card-body">
+                        <h5 class="card-title">Recetas con Carne de Res</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/imgs/postres-varios_5d6f5b3d_00535188_240223081823_900x900.jpg" class="card-img-top"
+                        alt="Postres">
+                    <div class="card-body">
+                        <h5 class="card-title">Postres</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/imgs/desayunos-saludables_7e8f5b3e_00535188_240223081823_900x900.jpg" class="card-img-top"
+                        alt="Desayunos">
+                    <div class="card-body">
+                        <h5 class="card-title">Desayunos</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/imgs/almuerzos-faciles_9f0f5b3f_00535188_240223081823_900x900.jpg" class="card-img-top"
+                        alt="Almuerzos">
+                    <div class="card-body">
+                        <h5 class="card-title">Almuerzos</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/imgs/pescado-asado_a1b2c3d4_00535188_240223081823_900x900.jpg" class="card-img-top"
+                        alt="Recetas con Pescado">
+                    <div class="card-body">
+                        <h5 class="card-title">Recetas con Pescado</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/imgs/vegetales-saludables_e5f6g7h8_00535188_240223081823_900x900.jpg" class="card-img-top"
+                        alt="Recetas con Vegetales">
+                    <div class="card-body">
+                        <h5 class="card-title">Recetas con Vegetales</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/imgs/carne-de-cerdo-asada_i9j0k1l2_00535188_240223081823_900x900.jpg" class="card-img-top"
+                        alt="Recetas con Carne de Cerdo">
+                    <div class="card-body">
+                        <h5 class="card-title">Recetas con Carne de Cerdo</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJ+Y3fZ5C2h8l5/9b5g5c5b5g5c5b5g5c5b5g="
+        crossorigin="anonymous"></script>
+
+    
+
+
+
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
