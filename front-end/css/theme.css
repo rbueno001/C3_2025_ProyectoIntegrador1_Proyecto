@@ -1,0 +1,180 @@
+/* ============================
+   PALETA DE COLORES
+================================*/
+
+:root {
+    --vino: #800000;
+    --vino-oscuro: #4b0012;
+    --vino-claro: #fce1e6;
+    --fondo-claro: #f6f6f9;
+    --texto-oscuro: #222222;
+}
+
+/* ============================
+   BASE GENERAL
+================================*/
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background-color: var(--fondo-claro);
+    color: var(--texto-oscuro);
+}
+
+/* ============================
+   NAVBAR
+================================*/
+
+.navbar {
+    background: linear-gradient(90deg, var(--vino) 0%, #b3003c 100%);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+.nav-link {
+    font-weight: 500;
+    position: relative;
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 4px;
+    width: 0;
+    height: 2px;
+    background-color: #ffffff;
+    transition: width 0.2s;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* ============================
+   HERO
+================================*/
+
+.hero-wrapper {
+    background-color: #ffffff;
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+}
+
+.hero-tag {
+    background-color: var(--vino-claro);
+    color: var(--vino-oscuro);
+    padding: 0.2rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.hero-title {
+    font-weight: 800;
+    font-size: clamp(2rem, 3vw, 2.4rem);
+}
+
+.hero-subtitle {
+    color: #555;
+}
+
+.hero-carousel img {
+    height: 260px;
+    object-fit: cover;
+    border-radius: 1.1rem;
+}
+
+/* BOTONES */
+
+.btn-vino {
+    background-color: var(--vino);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 0.6rem 1.6rem;
+    font-weight: 600;
+}
+
+.btn-vino:hover {
+    background-color: var(--vino-oscuro);
+}
+
+.btn-vino-outline {
+    border: 1px solid var(--vino);
+    color: var(--vino);
+    border-radius: 999px;
+    padding: 0.6rem 1.6rem;
+}
+
+.btn-vino-outline:hover {
+    background-color: var(--vino-claro);
+    color: var(--vino-oscuro);
+}
+
+/* ============================
+   CATEGORÍAS
+================================*/
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.section-title span {
+    width: 32px;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--vino) 0%, var(--vino-claro) 100%);
+}
+
+.category-card {
+    border: none;
+    border-radius: 1.1rem;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.06);
+    transition: transform 0.18s, box-shadow 0.18s;
+}
+
+.category-card img {
+    height: 190px;
+    object-fit: cover;
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 34px rgba(0,0,0,0.12);
+}
+
+.category-pill {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    background-color: rgba(0,0,0,0.65);
+    color: #fff;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+}
+
+/* ============================
+   FOOTER
+================================*/
+
+footer {
+    background: #1a0005;
+    color: #f8f8f8;
+    padding: 1.5rem 0;
+    font-size: 0.9rem;
+}
+
+footer a {
+    color: #fff;
+}
