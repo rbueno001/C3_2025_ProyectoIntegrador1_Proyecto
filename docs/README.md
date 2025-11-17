@@ -1,7 +1,8 @@
 # Gastro-Works
 ![Logo](imgs/logo.png)
-# Convenciones de nomenclatura: 
-Lower camel case
+# Convenciones de nomenclatura
+- Formato Variables y funciones: camelCase
+- Archivos: kebab-case
 # Formato de código:
 Se prohibe el uso de estilos en línea. 
 # Estrategia de branches:
