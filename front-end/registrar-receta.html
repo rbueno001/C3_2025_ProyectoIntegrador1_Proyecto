@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar receta | Gastro Works</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <!-- Estilos globales -->
+    <link rel="stylesheet" href="/front-end/css/theme.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR DINÁMICO -->
+    <div id="navbar"></div>
+
+    <script>
+        // Cargar navbar.html desde componentes
+        fetch("/front-end/componentes/navbar.html")
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById("navbar").innerHTML = html;
+            })
+            .catch(err => console.error("Error al cargar el navbar:", err));
+    </script>
+
+    <!-- CONTENIDO -->
+    <div class="container py-4">
+        <div class="registro-card mx-auto" style="max-width: 800px;">
+
+            <h2 class="titulo-registro">Registrar receta</h2>
+
+            <form id="formReceta">
+
+                <!-- Nombre -->
+                <div class="mb-3">
+                    <input type="text" class="form-control input-custom" placeholder="Nombre de la receta" required>
+                </div>
+
+                <!-- Categoría -->
+                <div class="mb-3">
+                    <select class="form-control input-custom" required>
+                        <option value="">Seleccione una categoría...</option>
+                        <option>Pollo</option>
+                        <option>Carne</option>
+                        <option>Pescado</option>
+                        <option>Vegetales</option>
+                        <option>Postres</option>
+                    </select>
+                </div>
+
+                <!-- Ingredientes -->
+                <h5 class="text-start mt-4">Ingredientes</h5>
+
+                <div id="contenedorIngredientes">
+                    <div class="row g-2 mb-2 ingrediente-item">
+                        <div class="col-12 col-md-8">
+                            <input type="text" class="form-control input-custom" placeholder="Ingrediente" required>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <input type="text" class="form-control input-custom" placeholder="Cantidad" required>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-vino my-2" id="btnAgregarIngrediente">
+                    Agregar ingrediente
+                </button>
+
+                <!-- Pasos -->
+                <h5 class="text-start mt-4">Pasos</h5>
+
+                <div id="contenedorPasos">
+                    <div class="mb-3 paso-item">
+                        <textarea class="form-control input-custom" placeholder="Describa el paso" required></textarea>
+                        <input type="file" accept="video/*" class="form-control mt-2">
+                    </div>
+                </div>
+
+                <button type="button" class="btn-vino my-2" id="btnAgregarPaso">
+                    Agregar paso
+                </button>
+
+                <!-- Guardar -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn-vino-center">
+                        Guardar receta
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // INGREDIENTES DINÁMICOS
+        document.getElementById("btnAgregarIngrediente").addEventListener("click", () => {
+            const cont = document.getElementById("contenedorIngredientes");
+            cont.insertAdjacentHTML("beforeend", `
+                <div class="row g-2 mb-2 ingrediente-item">
+                    <div class="col-12 col-md-8">
+                        <input type="text" class="form-control input-custom" placeholder="Ingrediente" required>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <input type="text" class="form-control input-custom" placeholder="Cantidad" required>
+                    </div>
+                </div>
+            `);
+        });
+
+        // PASOS DINÁMICOS
+        document.getElementById("btnAgregarPaso").addEventListener("click", () => {
+            const cont = document.getElementById("contenedorPasos");
+            cont.insertAdjacentHTML("beforeend", `
+                <div class="mb-3 paso-item">
+                    <textarea class="form-control input-custom" placeholder="Describa el paso" required></textarea>
+                    <input type="file" accept="video/*" class="form-control mt-2">
+                </div>
+            `);
+        });
+    </script>
+
+</body>
+</html>

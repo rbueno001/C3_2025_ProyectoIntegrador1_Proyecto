@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Compras | Gastro Works</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS Global -->
+    <link rel="stylesheet" href="/front-end/css/theme.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg bg-vino">
+        <div class="container">
+
+            <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
+                <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
+            </a>
+
+            <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu" aria-expanded="false"
+                aria-label="Mostrar menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
+                <ul class="navbar-nav align-items-lg-center">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/front-end/pagina-principal.html">Inicio</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/front-end/buscar-recetas.html">Recetas</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/front-end/planificador/planificador.html">Planificador</a>
+                    </li>
+
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <a class="btn btn-sm btn-light rounded-pill fw-semibold" href="/front-end/login.html">
+                            Iniciar sesión
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+
+    <!-- CONTENIDO -->
+    <div class="container py-4">
+
+        <h2 class="text-center fw-bold mb-4" style="color: var(--vino);">
+            Lista de Compras
+        </h2>
+
+        <p class="text-center mb-4">
+            Ingredientes generados automáticamente a partir de tu planificador semanal.
+        </p>
+
+        <!-- LISTA DE COMPRAS -->
+        <div class="card p-4 shadow-sm" style="border: 2px solid var(--vino); border-radius: 16px;">
+
+            <ul id="listaCompras" class="list-group mb-3" aria-live="polite"></ul>
+
+            <!-- BOTONES DE CONTROL -->
+            <div class="d-flex flex-column flex-sm-row gap-2 mt-3">
+
+                <button id="btnMarcarTodo" class="btn btn-vino w-100">
+                    Marcar todo como comprado
+                </button>
+
+                <button id="btnLimpiar" class="btn btn-excluir w-100">
+                    Limpiar lista
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        /* =====================================================
+           RECIBIR LISTA DESDE EL PLANIFICADOR
+           (Por ahora se usa localStorage. Luego se conecta al backend)
+        ===================================================== */
+
+        // Simulación de lista generada:
+        // Esto luego se reemplaza por datos reales del backend.
+        const ingredientesEjemplo = [
+            "2 tazas de arroz",
+            "1 cebolla",
+            "500 g de pollo",
+            "1 cebolla",             // repetido a propósito
+            "½ taza de leche",
+            "500 g de pollo"        // repetido a propósito
+        ];
+
+        // Si hay datos en el localStorage, usamos esos
+        const datosGuardados = JSON.parse(localStorage.getItem("listaCompras"));
+        const ingredientes = datosGuardados?.length ? datosGuardados : ingredientesEjemplo;
+
+        /* =====================================================
+           AGRUPAR INGREDIENTES REPETIDOS
+        ===================================================== */
+
+        function agruparIngredientes(lista) {
+            const mapa = {};
+
+            lista.forEach(item => {
+                const clave = item.trim().toLowerCase();
+                if (!mapa[clave]) mapa[clave] = { texto: item, cantidad: 1 };
+                else mapa[clave].cantidad++;
+            });
+
+            return Object.values(mapa);
+        }
+
+        const ingredientesAgrupados = agruparIngredientes(ingredientes);
+
+        /* =====================================================
+           MOSTRAR LISTA
+        ===================================================== */
+
+        const listaCompras = document.getElementById("listaCompras");
+
+        function renderizarLista() {
+            listaCompras.innerHTML = "";
+
+            ingredientesAgrupados.forEach((item, index) => {
+                const li = document.createElement("li");
+                li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
+
+                li.innerHTML = `
+                    <span>
+                        <input type="checkbox" class="form-check-input me-2 chkItem">
+                        ${item.texto}
+                        ${item.cantidad > 1 ? `<span class="badge bg-vino ms-2">x${item.cantidad}</span>` : ""}
+                    </span>
+
+                    <button class="btn btn-excluir btn-sm btnQuitar" aria-label="Quitar ingrediente">
+                        Quitar
+                    </button>
+                `;
+
+                // Quitar ingrediente
+                li.querySelector(".btnQuitar").addEventListener("click", () => {
+                    ingredientesAgrupados.splice(index, 1);
+                    guardarLista();
+                    renderizarLista();
+                });
+
+                listaCompras.appendChild(li);
+            });
+        }
+
+        renderizarLista();
+
+        /* =====================================================
+           MARCAR TODO COMO COMPRADO
+        ===================================================== */
+
+        document.getElementById("btnMarcarTodo").addEventListener("click", () => {
+            document.querySelectorAll(".chkItem").forEach(chk => chk.checked = true);
+        });
+
+        /* =====================================================
+           LIMPIAR LISTA
+        ===================================================== */
+
+        document.getElementById("btnLimpiar").addEventListener("click", () => {
+            ingredientesAgrupados.length = 0;
+            guardarLista();
+            renderizarLista();
+        });
+
+        /* =====================================================
+           GUARDAR EN LOCALSTORAGE
+        ===================================================== */
+
+        function guardarLista() {
+            const soloTextos = ingredientesAgrupados.map(i =>
+                i.cantidad > 1 ? `${i.cantidad} × ${i.texto}` : i.texto
+            );
+            localStorage.setItem("listaCompras", JSON.stringify(soloTextos));
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -21,12 +21,23 @@ body {
 }
 
 /* ============================
-   NAVBAR
+   NAVBAR ORIGINAL + AJUSTES NUEVOS
 ================================*/
 
 .navbar {
     background: linear-gradient(90deg, var(--vino) 0%, #b3003c 100%);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+    /* 🔹 Navbar más delgado */
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+}
+
+/* LOGO ESTIRADO PARA NAVBAR */
+.logo-navbar {
+    height: 95px;
+    width: auto;
+    object-fit: contain;
 }
 
 .navbar-brand {
@@ -34,25 +45,34 @@ body {
     letter-spacing: 0.03em;
 }
 
+/* LINKS BLANCOS Y SUBRAYADO */
 .nav-link {
     font-weight: 500;
     position: relative;
+    color: #ffffff !important; /* 🔹 Link blanco */
+    margin-left: 1.2rem; /* 🔹 Separación elegante */
 }
 
+/* Línea animada */
 .nav-link::after {
     content: "";
     position: absolute;
     left: 0;
-    bottom: 4px;
+    bottom: -3px;
     width: 0;
     height: 2px;
     background-color: #ffffff;
-    transition: width 0.2s;
+    transition: width 0.25s ease-in-out;
 }
 
 .nav-link:hover::after,
 .nav-link.active::after {
     width: 100%;
+}
+
+/* Hamburguesa blanca */
+.navbar-toggler-icon {
+    filter: brightness(0) invert(1);
 }
 
 /* ============================
@@ -177,4 +197,190 @@ footer {
 
 footer a {
     color: #fff;
+}
+
+/* ---------------------------
+   ESTILO REGISTRO USUARIO
+----------------------------*/
+
+/* Página completa centrada */
+.registro-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2rem 1rem;
+}
+
+/* Contenedor principal */
+.registro-wrapper {
+    max-width: 720px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* LOGO */
+.logo-registro {
+    width: 180px;
+    margin: 0 auto 10px auto;
+    display: block;
+}
+
+/* FOTO PERFIL */
+.foto-perfil-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 10px auto 20px auto;
+}
+
+.foto-perfil {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid var(--vino);
+    object-fit: cover;
+}
+
+/* Ícono cámara */
+.icono-camara {
+    background-color: var(--vino);
+    color: #fff;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* TARJETA FORMULARIO */
+.registro-card {
+    background: #fff;
+    border: 2px solid var(--vino);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+/* TÍTULO */
+.titulo-registro {
+    font-weight: 800;
+    color: var(--vino);
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+
+/* Inputs */
+.input-custom {
+    border-radius: 12px !important;
+    padding: 0.7rem !important;
+    font-size: 1rem;
+}
+
+/* Botón */
+.btn-vino-center {
+    background-color: var(--vino);
+    color: #fff;
+    border-radius: 25px;
+    padding: 0.6rem 2rem;
+    font-weight: 600;
+    border: none;
+    display: block;
+    margin: 0 auto;
+}
+
+.btn-vino-center:hover {
+    background-color: var(--vino-oscuro);
+}
+
+/* Link inferior */
+.link-acceso {
+    color: var(--vino-oscuro);
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .logo-registro {
+        width: 140px;
+    }
+
+    .foto-perfil {
+        width: 100px;
+        height: 100px;
+    }
+
+    .registro-card {
+        padding: 1.5rem;
+    }
+
+    .logo-navbar {
+        height: 75px;
+    }
+}
+
+/* ============================
+   BOTONES PERSONALIZADOS
+===============================*/
+
+.btn-vino {
+    background-color: var(--vino);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.65rem 1.4rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.btn-vino:hover,
+.btn-vino:focus {
+    background-color: var(--vino-oscuro);
+    color: #fff;
+    transform: scale(1.03);
+    outline: none;
+}
+
+/* Botón claro para excluir ingrediente */
+.btn-excluir {
+    background-color: #ffffff;
+    color: var(--vino);
+    border: 2px solid var(--vino);
+    border-radius: 50px;
+    padding: 0.65rem 1.4rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.btn-excluir:hover,
+.btn-excluir:focus {
+    background-color: var(--vino-claro);
+    color: var(--vino-oscuro);
+    transform: scale(1.03);
+}
+
+/* Icono + */
+.btn-plus-icon {
+    font-weight: 900;
+    margin-right: 6px;
+    font-size: 1.1rem;
+}
+
+@media (max-width: 576px) {
+    .btn-vino,
+    .btn-excluir {
+        width: 100%;
+        text-align: center;
+    }
 }

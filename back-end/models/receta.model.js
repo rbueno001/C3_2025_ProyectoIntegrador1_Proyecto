@@ -1,40 +1,29 @@
-// Modelo (esqueleto, estructura) de lo que se almacenará en la BD
-// Usuario: correo (string), nombre (string), cédula (string), celular (number), contraseña (string)
-
-const mongoose = require("mongoose"); 
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-// Creación del esquema
-const schemaReceta = new mongoose.Schema({
-    nombreReceta: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    ingrediente: {
-        type: String,
-        required: true,
-        unique: false
-    },
-    cantidad: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    medida: {
-        type: Number,
-        required: true
-    }, 
-    contrasenia: {
-        type: String, 
-        required: true
-    },
-    nombreUsuario: {
-        type: String, 
-        required: true
-    }
-
+const ingredienteSchema = new mongoose.Schema({
+    nombre: String,
+    cantidad: String,
+    unidad: String,
+    costoEstimado: Number
 });
 
-const Usuario = mongoose.model("Usuario", schemaUsuario);
-module.exports = Usuario; 
+const pasoSchema = new mongoose.Schema({
+    instruccion: String,
+    imagenUrl: String,
+    videoUrl: String
+});
+
+const recetaSchema = new mongoose.Schema({
+    titulo: { type: String, required: true },
+    descripcion: String,
+    ingredientes: [ingredienteSchema],
+    pasos: [pasoSchema],
+    presupuestoPorPorcion: Number,
+    tiempoPreparacionMin: Number,
+    autor: { type: Schema.Types.ObjectId, ref: "Usuario", required: true },
+    creadoEn: { type: Date, default: Date.now }
+});
+
+const Receta = mongoose.model("Receta", recetaSchema);
+module.exports = Receta;

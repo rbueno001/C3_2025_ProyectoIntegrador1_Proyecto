@@ -1,10 +1,6 @@
-// Modelo (esqueleto, estructura) de lo que se almacenará en la BD
-// Usuario: correo (string), nombre (string), cédula (string), celular (number), contraseña (string)
-
-const mongoose = require("mongoose"); 
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-// Creación del esquema
 const schemaUsuario = new mongoose.Schema({
     correo: {
         type: String,
@@ -13,8 +9,7 @@ const schemaUsuario = new mongoose.Schema({
     },
     nombre: {
         type: String,
-        required: true,
-        unique: false
+        required: true
     },
     cedula: {
         type: String,
@@ -24,17 +19,26 @@ const schemaUsuario = new mongoose.Schema({
     celular: {
         type: Number,
         required: true
-    }, 
+    },
     contrasenia: {
-        type: String, 
+        type: String,
         required: true
     },
     nombreUsuario: {
-        type: String, 
+        type: String,
         required: true
-    }
-
+    },
+    rol: {
+        type: String,
+        enum: ["chef", "usuario", "admin"],
+        default: "usuario",
+        required: true
+    },
+    recetas: [{
+        type: Schema.Types.ObjectId,
+        ref: "Receta"
+    }]
 });
 
 const Usuario = mongoose.model("Usuario", schemaUsuario);
-module.exports = Usuario; 
+module.exports = Usuario;
