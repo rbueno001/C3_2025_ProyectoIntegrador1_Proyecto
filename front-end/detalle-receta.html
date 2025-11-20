@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gastro Works | Detalle de Receta</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- CSS externo -->
+  <link rel="stylesheet" href="/front-end/css/theme.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+  <!-- NAVBAR (misma que en la página principal) -->
+  <nav class="navbar navbar-expand-lg bg-vino">
+    <div class="container">
+
+      <!-- LOGO -->
+      <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
+        <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
+      </a>
+
+      <!-- BOTÓN RESPONSIVE -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+        aria-label="Mostrar menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- MENÚ -->
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link" href="/front-end/pagina-principal.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/front-end/buscar-recetas.html">Recetas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Chefs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Sobre Nosotros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contacto</a>
+          </li>
+          <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+            <a class="btn btn-sm btn-light rounded-pill fw-semibold" href="/front-end/login.html">
+              Iniciar sesión
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-fill py-4 py-md-5">
+    <div class="container" id="recipe-container">
+
+      <!-- Encabezado de la receta -->
+      <div class="row g-4 align-items-start">
+        <div class="col-md-6">
+          <img id="recipe-image" src="" alt="Imagen de la receta"
+            class="img-fluid rounded shadow-sm w-100" style="max-height: 420px; object-fit: cover;">
+        </div>
+
+        <div class="col-md-6">
+          <p class="text-uppercase small text-muted mb-1">Receta destacada</p>
+          <h1 id="recipe-title" class="h2 mb-2">Título de la receta</h1>
+
+          <p class="mb-2 text-muted">
+            Por <span id="recipe-author" class="fw-semibold">Autor</span>
+          </p>
+
+          <div class="mb-3 d-flex flex-wrap gap-2">
+            <span class="badge text-bg-secondary" id="recipe-type">Tipo</span>
+            <span class="badge text-bg-warning text-dark" id="recipe-difficulty">Dificultad</span>
+            <span class="badge text-bg-info text-dark" id="recipe-occasion">Ocasión</span>
+          </div>
+
+          <p id="recipe-description" class="mb-3 text-muted">
+            Descripción breve de la receta.
+          </p>
+
+          <div class="d-flex flex-wrap gap-4 mb-3">
+            <div>
+              <div class="fw-semibold" id="recipe-time">—</div>
+              <small class="text-muted">Tiempo total</small>
+            </div>
+            <div>
+              <div class="fw-semibold" id="recipe-servings">—</div>
+              <small class="text-muted">Porciones</small>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <a href="/front-end/pagina-principal.html" class="btn btn-vino-outline btn-sm">
+              ← Volver al inicio
+            </a>
+            <button class="btn btn-vino btn-sm" type="button">
+              Guardar en mis favoritas
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <!-- Ingredientes y pasos -->
+      <div class="row g-4">
+        <div class="col-md-5">
+          <h2 class="h5 mb-3">Ingredientes</h2>
+          <ul id="recipe-ingredients" class="list-unstyled small">
+            <!-- Se llena desde JS -->
+          </ul>
+        </div>
+
+        <div class="col-md-7">
+          <h2 class="h5 mb-3">Preparación</h2>
+          <ol id="recipe-steps" class="small">
+            <!-- Se llena desde JS -->
+          </ol>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Mensaje de error (si no hay receta) -->
+    <div class="container d-none" id="recipe-error">
+      <div class="alert alert-danger mt-4">
+        No se encontró la receta solicitada. Verifica el enlace o regresa al inicio.
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+   <footer class="mt-auto py-3 border-top">
+        <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+            <div>
+                © <span id="year"></span> Gastro Works · Todos los derechos reservados.
+            </div>
+            <div>
+                <a href="#">Términos</a> · <a href="#">Privacidad</a>
+            </div>
+        </div>
+    </footer>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/front-end/js/recipe-details.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+
+</html>
