@@ -20,6 +20,23 @@ body {
     color: var(--texto-oscuro);
 }
 
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+    padding: 1rem 0;
+    border-top: 1px solid #ddd;
+}
+
+
+
 /* ============================
    NAVBAR ORIGINAL + AJUSTES NUEVOS
 ================================*/
@@ -167,6 +184,15 @@ body {
     height: 190px;
     object-fit: cover;
 }
+
+.fixed-img {
+    height: 220px;       /* Ajusta si querés más grande o más pequeña */
+    width: 100%;
+    object-fit: cover;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
 
 .category-card:hover {
     transform: translateY(-4px);
