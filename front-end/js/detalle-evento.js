@@ -5,7 +5,7 @@ const EVENTOS = {
     id: "feria_cafe_frailes",
     titulo: "Feria del Café Frailes",
     tipo: "Feria gastronómica y cultural",
-    fecha: "19 de enero",
+    fecha: "Martes 2 Diciembre de 2025",
     hora: "De 8:00 a.m. a 6:00 p.m.",
     modalidad: "Presencial",
     lugar: "Frailes, Costa Rica (campo ferial)",
