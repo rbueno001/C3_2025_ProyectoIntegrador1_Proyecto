@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú semanal | Gastro Works</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/front-end/css/theme.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg bg-vino">
+    <div class="container">
+
+      <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
+        <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+        aria-label="Mostrar menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link" href="/front-end/pagina-principal.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/front-end/buscar-recetas.html">Recetas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/front-end/menu-semanal.html">Menú semanal</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/front-end/lista-compras.html">Lista de compras</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- CONTENIDO -->
+  <main class="flex-fill py-4 py-md-5">
+    <div class="container">
+
+      <h1 class="h3 mb-3">Planificador de menú semanal</h1>
+
+      <p class="text-muted mb-4">
+        Seleccione una receta para cada día de la semana. El menú se guardará en el navegador y se utilizará para
+        generar la lista de compras.
+      </p>
+
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label for="semanaTexto" class="form-label">Nombre o descripción de la semana</label>
+          <input type="text" id="semanaTexto" class="form-control input-custom"
+            placeholder="Ejemplo: Semana 1 de marzo" />
+        </div>
+      </div>
+
+      <div class="table-responsive mb-4">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th>Día</th>
+              <th>Receta seleccionada</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-menu">
+            <!-- Se llena desde JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex flex-wrap gap-2">
+        <button id="btn-guardar-menu" class="btn-vino">
+          Guardar menú semanal
+        </button>
+        <a href="/front-end/lista-compras.html" class="btn btn-vino-outline">
+          Ver lista de compras
+        </a>
+      </div>
+
+      <div id="mensaje-menu" class="mt-3"></div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto py-3 border-top">
+    <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+      <div>
+        © <span id="year"></span> Gastro Works · Todos los derechos reservados.
+      </div>
+      <div>
+        <a href="#">Términos</a> · <a href="#">Privacidad</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/front-end/js/menu-semanal.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+
+</html>
