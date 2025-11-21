@@ -18,13 +18,9 @@
     <div id="navbar"></div>
 
     <script>
-        // Cargar navbar.html desde componentes
         fetch("/front-end/componentes/navbar.html")
             .then(res => res.text())
-            .then(html => {
-                document.getElementById("navbar").innerHTML = html;
-            })
-            .catch(err => console.error("Error al cargar el navbar:", err));
+            .then(html => document.getElementById("navbar").innerHTML = html);
     </script>
 
     <!-- CONTENIDO -->
@@ -37,12 +33,12 @@
 
                 <!-- Nombre -->
                 <div class="mb-3">
-                    <input type="text" class="form-control input-custom" placeholder="Nombre de la receta" required>
+                    <input type="text" id="nombreReceta" class="form-control input-custom" placeholder="Nombre de la receta" required>
                 </div>
 
                 <!-- Categoría -->
                 <div class="mb-3">
-                    <select class="form-control input-custom" required>
+                    <select id="categoria" class="form-control input-custom" required>
                         <option value="">Seleccione una categoría...</option>
                         <option>Pollo</option>
                         <option>Carne</option>
@@ -56,14 +52,33 @@
                 <h5 class="text-start mt-4">Ingredientes</h5>
 
                 <div id="contenedorIngredientes">
+
                     <div class="row g-2 mb-2 ingrediente-item">
-                        <div class="col-12 col-md-8">
+
+                        <div class="col-12 col-md-5">
                             <input type="text" class="form-control input-custom" placeholder="Ingrediente" required>
                         </div>
+
                         <div class="col-12 col-md-3">
-                            <input type="text" class="form-control input-custom" placeholder="Cantidad" required>
+                            <input type="number" class="form-control input-custom" placeholder="Cantidad" min="0" step="0.01" required>
                         </div>
+
+                        <div class="col-12 col-md-3">
+                            <select class="form-select input-custom" required>
+                                <option value="" disabled selected>Unidad</option>
+                                <option value="g">g</option>
+                                <option value="kg">kg</option>
+                                <option value="ml">ml</option>
+                                <option value="l">l</option>
+                                <option value="cucharadita">Cucharadita</option>
+                                <option value="cucharada">Cucharada</option>
+                                <option value="taza">Taza</option>
+                                <option value="unidad">Unidad</option>
+                            </select>
+                        </div>
+
                     </div>
+
                 </div>
 
                 <button type="button" class="btn-vino my-2" id="btnAgregarIngrediente">
@@ -95,34 +110,7 @@
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script>
-        // INGREDIENTES DINÁMICOS
-        document.getElementById("btnAgregarIngrediente").addEventListener("click", () => {
-            const cont = document.getElementById("contenedorIngredientes");
-            cont.insertAdjacentHTML("beforeend", `
-                <div class="row g-2 mb-2 ingrediente-item">
-                    <div class="col-12 col-md-8">
-                        <input type="text" class="form-control input-custom" placeholder="Ingrediente" required>
-                    </div>
-                    <div class="col-12 col-md-3">
-                        <input type="text" class="form-control input-custom" placeholder="Cantidad" required>
-                    </div>
-                </div>
-            `);
-        });
-
-        // PASOS DINÁMICOS
-        document.getElementById("btnAgregarPaso").addEventListener("click", () => {
-            const cont = document.getElementById("contenedorPasos");
-            cont.insertAdjacentHTML("beforeend", `
-                <div class="mb-3 paso-item">
-                    <textarea class="form-control input-custom" placeholder="Describa el paso" required></textarea>
-                    <input type="file" accept="video/*" class="form-control mt-2">
-                </div>
-            `);
-        });
-    </script>
+    <script src="/front-end/js/registrar-receta.js"></script>
 
 </body>
 </html>

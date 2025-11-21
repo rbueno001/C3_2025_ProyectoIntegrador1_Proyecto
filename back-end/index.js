@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -9,21 +10,33 @@ const planificadorRoute = require("./routes/planificador.route");
 
 const app = express();
 
-app.use(cors());
+// CORS
+app.use(cors({
+    origin: "*",
+    methods: "GET,POST,PUT,DELETE",
+    allowedHeaders: "Content-Type, Authorization"
+}));
+
+// JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Archivos estáticos
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-mongoose.connect("mongodb://localhost:27017/gastroworks")
-    .then(() => console.log("Conexión a MongoDB exitosa"))
-    .catch(err => console.error("Error al conectar a MongoDB:", err));
+// Conexión a MongoDB Atlas
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log("✅ Conexión a MongoDB Atlas exitosa"))
+    .catch(err => console.error("❌ Error al conectar a MongoDB Atlas:", err));
 
+// Rutas
 app.use("/usuarios", usuarioRoute);
 app.use("/recetas", recetaRoute);
 app.use("/planificador", planificadorRoute);
 
-const PORT = 3000;
+// Puerto
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-    console.log("Servidor escuchando en el puerto " + PORT);
+    console.log(`🚀 Servidor funcionando en el puerto ${PORT}`);
 });

@@ -2,124 +2,116 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Buscar recetas | Gastro Works</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscar recetas | Gastro Works</title>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" 
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-
-    <!-- Tema general -->
-    <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/front-end/css/theme.css">
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100 bg-light">
 
-    <!-- NAVBAR -->
-    <div id="navbar-container"></div>
-    <script>
-        fetch("componentes/navbar.html")
-            .then(r => r.text())
-            .then(html => { 
-                document.getElementById("navbar-container").innerHTML = html 
-            });
-    </script>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg bg-vino">
+    <div class="container">
 
-    <!-- TARJETA CENTRADA -->
-    <div class="container my-4">
-        <div class="registro-card mx-auto" style="max-width: 700px;">
+      <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
+        <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
+      </a>
 
-            <h2 class="titulo-registro mb-4">Buscar recetas</h2>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+        aria-label="Mostrar menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-            <!-- ============================== -->
-            <!-- INGREDIENTES A INCLUIR -->
-            <!-- ============================== -->
-            <h5 class="text-center fw-bold mb-3" style="color: var(--vino);">
-                Ingredientes que quiero usar
-            </h5>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link" href="/front-end/pagina-principal.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/front-end/buscar-recetas.html">Recetas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Chefs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Sobre Nosotros</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contacto</a>
+          </li>
+          <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+            <a class="btn btn-sm btn-light rounded-pill fw-semibold" href="/front-end/login.html">
+              Iniciar sesión
+            </a>
+          </li>
+        </ul>
+      </div>
 
-            <div id="lista-incluir"></div>
-
-            <button id="btnAgregarIncluir"
-                class="btn-vino-center mt-3 mb-4"
-                style="width: 100%; max-width: 260px;">
-                Agregar ingrediente
-            </button>
-
-            <hr>
-
-            <!-- ============================== -->
-            <!-- INGREDIENTES A EXCLUIR -->
-            <!-- ============================== -->
-            <h5 class="text-center fw-bold mt-4 mb-3" style="color: var(--vino);">
-                Ingredientes que NO quiero
-            </h5>
-
-            <div id="lista-excluir"></div>
-
-            <button id="btnAgregarExcluir"
-                class="btn-vino-center mt-3 mb-4"
-                style="width: 100%; max-width: 260px;">
-                Agregar ingrediente
-            </button>
-
-            <hr>
-
-            <!-- BOTÓN BUSCAR -->
-            <button class="btn-vino-center mt-4" style="width: 100%; max-width: 260px;">
-                Buscar recetas
-            </button>
-
-        </div>
     </div>
+  </nav>
 
-    <!-- =================================== -->
-    <!-- SCRIPT – manejo de ingredientes -->
-    <!-- =================================== -->
-    <script>
-        // Crear campo dinámico
-        function crearInputIngrediente() {
-            const wrapper = document.createElement("div");
-            wrapper.className = "d-flex gap-2 align-items-center mb-3";
+  <!-- CONTENIDO -->
+  <main class="flex-fill py-4 py-md-5">
+    <div class="container">
 
-            const input = document.createElement("input");
-            input.type = "text";
-            input.placeholder = "Ingrese un ingrediente";
-            input.className = "form-control input-custom";
-            input.setAttribute("aria-label", "Ingrediente");
+      <h1 class="h3 mb-4">Buscar recetas</h1>
 
-            const btnEliminar = document.createElement("button");
-            btnEliminar.type = "button";
-            btnEliminar.className = "btn btn-danger";
-            btnEliminar.style = "border-radius:12px;background:#950000;";
-            btnEliminar.textContent = "Eliminar";
+      <!-- Filtros -->
+      <form id="form-buscar" class="row g-3 mb-4">
+        <div class="col-md-4">
+          <input type="text" id="textoBusqueda" class="form-control input-custom"
+            placeholder="Buscar por nombre, autor o descripción">
+        </div>
+        <div class="col-md-3">
+          <input type="text" id="ingredienteBusqueda" class="form-control input-custom"
+            placeholder="Buscar por ingrediente">
+        </div>
+        <div class="col-md-3">
+          <select id="dificultadBusqueda" class="form-control input-custom">
+            <option value="">Dificultad (todas)</option>
+            <option value="Fácil">Fácil</option>
+            <option value="Media">Media</option>
+            <option value="Difícil">Difícil</option>
+          </select>
+        </div>
+        <div class="col-md-2 d-grid">
+          <button type="submit" class="btn-vino">Buscar</button>
+        </div>
+      </form>
 
-            btnEliminar.onclick = () => wrapper.remove();
+      <!-- Resultados -->
+      <div class="row g-4" id="contenedor-recetas">
+        <!-- Tarjetas de recetas generadas desde JS -->
+      </div>
 
-            wrapper.appendChild(input);
-            wrapper.appendChild(btnEliminar);
+      <div id="mensaje-sin-resultados" class="mt-4 d-none">
+        <div class="alert alert-info">
+          No se encontraron recetas con los filtros seleccionados.
+        </div>
+      </div>
 
-            return wrapper;
-        }
+    </div>
+  </main>
 
-        // Listas
-        const listaIncluir = document.getElementById("lista-incluir");
-        const listaExcluir = document.getElementById("lista-excluir");
+  <!-- FOOTER -->
+  <footer class="mt-auto py-3 border-top">
+    <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+      <div>
+        © <span id="year"></span> Gastro Works · Todos los derechos reservados.
+      </div>
+      <div>
+        <a href="#">Términos</a> · <a href="#">Privacidad</a>
+      </div>
+    </div>
+  </footer>
 
-        // Botones
-        document.getElementById("btnAgregarIncluir").onclick = () => {
-            listaIncluir.appendChild(crearInputIngrediente());
-        };
-
-        document.getElementById("btnAgregarExcluir").onclick = () => {
-            listaExcluir.appendChild(crearInputIngrediente());
-        };
-
-        // Agregar 1 por defecto
-        listaIncluir.appendChild(crearInputIngrediente());
-        listaExcluir.appendChild(crearInputIngrediente());
-    </script>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/front-end/js/buscar-recetas.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
+
 </html>
