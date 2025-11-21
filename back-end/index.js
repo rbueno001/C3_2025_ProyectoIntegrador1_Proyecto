@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 const usuarioRoute = require("./routes/usuario.route");
 const recetaRoute = require("./routes/receta.route");
-const planificadorRoute = require("./routes/planificador.route");
+
 
 const app = express();
 
@@ -27,16 +27,16 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Conexión a MongoDB Atlas
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("✅ Conexión a MongoDB Atlas exitosa"))
-    .catch(err => console.error("❌ Error al conectar a MongoDB Atlas:", err));
+    .catch(err => console.error("Error al conectar a MongoDB Atlas:", err));
 
 // Rutas
 app.use("/usuarios", usuarioRoute);
 app.use("/recetas", recetaRoute);
-app.use("/planificador", planificadorRoute);
+
 
 // Puerto
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor funcionando en el puerto ${PORT}`);
+    console.log(`Servidor funcionando en el puerto ${PORT}`);
 });
