@@ -12,36 +12,64 @@
 
 <body class="d-flex flex-column min-vh-100 bg-light">
 
-  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg bg-vino">
-    <div class="container">
+  <div class="container">
 
-      <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
-        <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
-      </a>
+    <!-- LOGO -->
+    <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
+      <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
+    </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-        aria-label="Mostrar menú">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <!-- BOTÓN RESPONSIVE -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+      aria-label="Mostrar menú">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav align-items-lg-center">
-          <li class="nav-item">
-            <a class="nav-link" href="/front-end/pagina-principal.html">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/front-end/buscar-recetas.html">Recetas</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="/front-end/favoritos.html">Mis favoritas</a>
-          </li>
-        </ul>
-      </div>
+    <!-- MENÚ -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav align-items-lg-center">
 
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/front-end/pagina-principal.html">Inicio</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/front-end/buscar-recetas.html">Recetas</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Chefs</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Sobre Nosotros</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contacto</a>
+        </li>
+
+        <!-- Botones de sesión -->
+        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+          <!-- Botón para NO logueados -->
+          <a id="nav-login" class="btn btn-sm btn-light rounded-pill fw-semibold"
+             href="/front-end/login.html">
+            Iniciar sesión
+          </a>
+          <!-- Botón para usuarios logueados (se muestra con auth.js) -->
+          <a id="nav-profile" class="btn btn-sm btn-light rounded-pill fw-semibold d-none"
+             href="/front-end/perfil.html">
+            Mi perfil
+          </a>
+        </li>
+
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
+
 
   <!-- CONTENIDO -->
   <main class="flex-fill py-4 py-md-5">
@@ -72,6 +100,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/front-end/js/favoritos.js"></script>
+  <script src="/front-end/js/auth.js"></script>
   <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </body>
 

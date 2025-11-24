@@ -26,13 +26,25 @@ document.getElementById("formLogin").addEventListener("submit", async (e) => {
             return;
         }
 
-        // Guardar usuario en sessionStorage
-        sessionStorage.setItem("usuario", JSON.stringify(data.usuario));
+        // -------------------------------
+        //  GUARDAR USUARIO EN localStorage
+        // -------------------------------
+        const usuarioFinal = {
+            nombre: data.usuario.nombre,
+            correo: data.usuario.correo,
+            foto: data.usuario.foto || "/imgs/user-placeholder.png",
+            favoritos: data.usuario.favoritos || 0,
+            comentarios: data.usuario.comentarios || 0,
+            likes: data.usuario.likes || 0
+        };
+
+        localStorage.setItem("usuario", JSON.stringify(usuarioFinal));
 
         // Redirigir al inicio
         window.location.href = "/front-end/pagina-principal.html";
 
     } catch (error) {
+        console.error(error);
         errorBox.textContent = "Error de conexión con el servidor";
         errorBox.classList.remove("d-none");
     }
