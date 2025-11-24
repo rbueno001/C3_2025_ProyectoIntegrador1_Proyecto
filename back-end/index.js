@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 const usuarioRoute = require("./routes/usuario.route");
 const recetaRoute = require("./routes/receta.route");
-const adminRoutes = require("./routes/admin.routes");
+const adminRoutes = require("./routes/admin.route");
 
 
 

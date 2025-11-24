@@ -5,7 +5,7 @@ const router = express.Router();
 const Usuario = require("../models/usuario.model");
 const Receta = require("../models/receta.model");
 const Reporte = require("../models/reporte.model");
-const Sancion = require("../models/sancion.model"); // opcional
+
 
 /* ============================================================
    MÉTRICAS BÁSICAS
