@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 
 const usuarioRoute = require("./routes/usuario.route");
 const recetaRoute = require("./routes/receta.route");
+const adminRoutes = require("./routes/admin.routes");
+
 
 
 const app = express();
@@ -32,6 +34,7 @@ mongoose.connect(process.env.MONGODB_URI)
 // Rutas
 app.use("/usuarios", usuarioRoute);
 app.use("/recetas", recetaRoute);
+app.use("/admin", adminRoutes);
 
 
 // Puerto
