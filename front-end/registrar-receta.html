@@ -20,32 +20,106 @@
     <script>
         fetch("/front-end/componentes/navbar.html")
             .then(res => res.text())
-            .then(html => document.getElementById("navbar").innerHTML = html);
+            .then(html => {
+                document.getElementById("navbar").innerHTML = html;
+                // Opcional: aquí podrías llamar algo de auth.js si lo necesitás
+            });
     </script>
 
     <!-- CONTENIDO -->
     <div class="container py-4">
         <div class="registro-card mx-auto" style="max-width: 800px;">
 
-            <h2 class="titulo-registro">Registrar receta</h2>
+            <h2 class="titulo-registro mb-3">Registrar receta</h2>
+
+            <!-- Mensajes de éxito / error -->
+            <div id="mensaje-receta" class="mb-3"></div>
 
             <form id="formReceta">
 
-                <!-- Nombre -->
+                <!-- Nombre de la receta -->
                 <div class="mb-3">
-                    <input type="text" id="nombreReceta" class="form-control input-custom" placeholder="Nombre de la receta" required>
+                    <input
+                        type="text"
+                        id="nombreReceta"
+                        class="form-control input-custom"
+                        placeholder="Nombre de la receta"
+                        required
+                    >
                 </div>
 
-                <!-- Categoría -->
+                <!-- Categoría (puede mapearse a 'tipo' en el backend si quieres) -->
                 <div class="mb-3">
                     <select id="categoria" class="form-control input-custom" required>
                         <option value="">Seleccione una categoría...</option>
-                        <option>Pollo</option>
-                        <option>Carne</option>
-                        <option>Pescado</option>
-                        <option>Vegetales</option>
-                        <option>Postres</option>
+                        <option value="Pollo">Pollo</option>
+                        <option value="Carne">Carne</option>
+                        <option value="Pescado">Pescado</option>
+                        <option value="Vegetales">Vegetales</option>
+                        <option value="Postres">Postres</option>
                     </select>
+                </div>
+                <!-- Ocasión -->
+                 <!-- Ocasión -->
+                <div class="mb-3">
+                    <select id="ocasion" class="form-control input-custom" required>
+                        <option value="">Seleccione una ocasión...</option>
+                        <option>Desayuno</option>
+                        <option>Almuerzo</option>
+                        <option>Cena</option>
+                        <option>Postre</option>
+                        <option>Reuniones</option>
+                        <option>Fiestas</option>
+                        <option>Para llevar</option>
+                        <option>Comida rápida</option>
+                    </select>
+                </div>
+                    
+
+                <!-- Descripción -->
+                <div class="mb-3">
+                    <textarea
+                        id="descripcionReceta"
+                        class="form-control input-custom"
+                        rows="3"
+                        placeholder="Describa brevemente la receta"
+                        required
+                    ></textarea>
+                </div>
+
+                <!-- Tiempo, presupuesto, porciones -->
+                <div class="row g-3 mb-3">
+                    <div class="col-12 col-md-4">
+                        <input
+                            type="number"
+                            id="tiempoPreparacion"
+                            class="form-control input-custom"
+                            placeholder="Tiempo (min)"
+                            min="1"
+                            required
+                        >
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <input
+                            type="number"
+                            id="presupuestoPorPorcion"
+                            class="form-control input-custom"
+                            placeholder="Presupuesto por porción"
+                            min="0"
+                            step="0.01"
+                        >
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <input
+                            type="number"
+                            id="porciones"
+                            class="form-control input-custom"
+                            placeholder="Porciones"
+                            min="1"
+                        >
+                    </div>
                 </div>
 
                 <!-- Ingredientes -->
@@ -56,16 +130,28 @@
                     <div class="row g-2 mb-2 ingrediente-item">
 
                         <div class="col-12 col-md-5">
-                            <input type="text" class="form-control input-custom" placeholder="Ingrediente" required>
+                            <input
+                                type="text"
+                                class="form-control input-custom ingrediente-nombre"
+                                placeholder="Ingrediente"
+                                required
+                            >
                         </div>
 
                         <div class="col-12 col-md-3">
-                            <input type="number" class="form-control input-custom" placeholder="Cantidad" min="0" step="0.01" required>
+                            <input
+                                type="number"
+                                class="form-control input-custom ingrediente-cantidad"
+                                placeholder="Cantidad"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
                         </div>
 
                         <div class="col-12 col-md-3">
-                            <select class="form-select input-custom" required>
-                                <option value="" disabled selected>Unidad</option>
+                            <select class="form-select input-custom ingrediente-unidad" required>
+                                <option value="">Unidad</option>
                                 <option value="g">g</option>
                                 <option value="kg">kg</option>
                                 <option value="ml">ml</option>
@@ -90,8 +176,18 @@
 
                 <div id="contenedorPasos">
                     <div class="mb-3 paso-item">
-                        <textarea class="form-control input-custom" placeholder="Describa el paso" required></textarea>
-                        <input type="file" accept="video/*" class="form-control mt-2">
+                        <textarea
+                            class="form-control input-custom paso-instruccion"
+                            placeholder="Describa el paso"
+                            required
+                        ></textarea>
+
+                        <!-- Campo para video (por ahora solo lo dejamos, luego se puede conectar a subida real) -->
+                        <input
+                            type="file"
+                            accept="video/*"
+                            class="form-control mt-2 paso-video"
+                        >
                     </div>
                 </div>
 
@@ -112,7 +208,6 @@
 
     <script src="/front-end/js/registrar-receta.js"></script>
     <script src="/front-end/js/auth.js"></script>
-
 
 </body>
 </html>

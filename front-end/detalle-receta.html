@@ -15,71 +15,62 @@
 
 <body class="d-flex flex-column min-vh-100 bg-light">
 
-  <!-- NAVBAR (misma que en la página principal) -->
+  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg bg-vino">
-  <div class="container">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
+        <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
+      </a>
 
-    <!-- LOGO -->
-    <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
-      <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
-    </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <!-- BOTÓN RESPONSIVE -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-      data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-      aria-label="Mostrar menú">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav align-items-lg-center">
 
-    <!-- MENÚ -->
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link active" href="/front-end/pagina-principal.html">Inicio</a>
+          </li>
 
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/front-end/pagina-principal.html">Inicio</a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/front-end/buscar-recetas.html">Recetas</a>
+          </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="/front-end/buscar-recetas.html">Recetas</a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Chefs</a>
+          </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="#">Chefs</a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Sobre Nosotros</a>
+          </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="#">Sobre Nosotros</a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contacto</a>
+          </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contacto</a>
-        </li>
+          <!-- Sesión -->
+          <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+            <a id="nav-login" class="btn btn-sm btn-light rounded-pill fw-semibold"
+               href="/front-end/login.html">
+              Iniciar sesión
+            </a>
 
-        <!-- Botones de sesión -->
-        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-          <!-- Botón para NO logueados -->
-          <a id="nav-login" class="btn btn-sm btn-light rounded-pill fw-semibold"
-             href="/front-end/login.html">
-            Iniciar sesión
-          </a>
-          <!-- Botón para usuarios logueados (se muestra con auth.js) -->
-          <a id="nav-profile" class="btn btn-sm btn-light rounded-pill fw-semibold d-none"
-             href="/front-end/perfil.html">
-            Mi perfil
-          </a>
-        </li>
+            <a id="nav-profile" class="btn btn-sm btn-light rounded-pill fw-semibold d-none"
+               href="/front-end/perfil.html">
+              Mi perfil
+            </a>
+          </li>
 
-      </ul>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
-
+  </nav>
 
   <!-- CONTENIDO PRINCIPAL -->
   <main class="flex-fill py-4 py-md-5">
     <div class="container" id="recipe-container">
 
-      <!-- Encabezado de la receta -->
       <div class="row g-4 align-items-start">
         <div class="col-md-6">
           <img id="recipe-image" src="" alt="Imagen de la receta"
@@ -100,9 +91,7 @@
             <span class="badge text-bg-info text-dark" id="recipe-occasion">Ocasión</span>
           </div>
 
-          <p id="recipe-description" class="mb-3 text-muted">
-            Descripción breve de la receta.
-          </p>
+          <p id="recipe-description" class="mb-3 text-muted"></p>
 
           <div class="d-flex flex-wrap gap-4 mb-3">
             <div>
@@ -115,6 +104,7 @@
             </div>
           </div>
 
+          <!-- BOTONES -->
           <div class="d-flex flex-wrap gap-2 mt-2">
             <a href="/front-end/pagina-principal.html" class="btn btn-vino-outline btn-sm">
               ← Volver al inicio
@@ -122,50 +112,49 @@
             <button class="btn btn-vino btn-sm" type="button">
               Guardar en mis favoritas
             </button>
+
+            <!--  BOTÓN LIKE -->
+            <button id="btn-like" class="btn btn-vino-outline btn-sm">
+              ❤️ Me gusta (<span id="like-count">0</span>)
+            </button>
           </div>
+
         </div>
       </div>
 
       <hr class="my-4">
 
-      <!-- Ingredientes y pasos -->
       <div class="row g-4">
         <div class="col-md-5">
           <h2 class="h5 mb-3">Ingredientes</h2>
-          <ul id="recipe-ingredients" class="list-unstyled small">
-            <!-- Se llena desde JS -->
-          </ul>
+          <ul id="recipe-ingredients" class="list-unstyled small"></ul>
         </div>
 
         <div class="col-md-7">
           <h2 class="h5 mb-3">Preparación</h2>
-          <ol id="recipe-steps" class="small">
-            <!-- Se llena desde JS -->
-          </ol>
+          <ol id="recipe-steps" class="small"></ol>
         </div>
       </div>
-
     </div>
 
-    <!-- Mensaje de error (si no hay receta) -->
     <div class="container d-none" id="recipe-error">
       <div class="alert alert-danger mt-4">
-        No se encontró la receta solicitada. Verifica el enlace o regresa al inicio.
+        No se encontró la receta solicitada.
       </div>
     </div>
   </main>
 
   <!-- FOOTER -->
-   <footer class="mt-auto py-3 border-top">
-        <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
-            <div>
-                © <span id="year"></span> Gastro Works · Todos los derechos reservados.
-            </div>
-            <div>
-                <a href="#">Términos</a> · <a href="#">Privacidad</a>
-            </div>
-        </div>
-    </footer>
+  <footer class="mt-auto py-3 border-top">
+    <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+      <div>
+        © <span id="year"></span> Gastro Works · Todos los derechos reservados.
+      </div>
+      <div>
+        <a href="#">Términos</a> · <a href="#">Privacidad</a>
+      </div>
+    </div>
+  </footer>
 
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
@@ -175,6 +164,6 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
-</body>
 
+</body>
 </html>

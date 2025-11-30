@@ -120,7 +120,9 @@ router.delete("/:id", async (req, res) => {
 
 /* ============================================================
    GET — Obtener todas las recetas pendientes (para ADMIN)
-   GET /recetas-admin/pendientes
+   GET /recetas/admin/pendientes
+   (como está montado en index.js: app.use("/recetas", recetaRoute);
+    la ruta completa es /recetas/admin/pendientes)
 ============================================================ */
 router.get("/admin/pendientes", async (req, res) => {
     try {
@@ -135,7 +137,7 @@ router.get("/admin/pendientes", async (req, res) => {
 
 /* ============================================================
    PUT — Aprobar receta
-   PUT /recetas-admin/:id/aprobar
+   PUT /recetas/admin/:id/aprobar
 ============================================================ */
 router.put("/admin/:id/aprobar", async (req, res) => {
     try {
@@ -158,7 +160,7 @@ router.put("/admin/:id/aprobar", async (req, res) => {
 
 /* ============================================================
    PUT — Rechazar receta
-   PUT /recetas-admin/:id/rechazar
+   PUT /recetas/admin/:id/rechazar
 ============================================================ */
 router.put("/admin/:id/rechazar", async (req, res) => {
     try {
@@ -179,4 +181,90 @@ router.put("/admin/:id/rechazar", async (req, res) => {
     }
 });
 
+/* ============================================================
+   PUT — Dar like a una receta
+   PUT /recetas/:id/like
+   Body esperado: { usuarioId: "..." }
+============================================================ */
+router.put("/:id/like", async (req, res) => {
+    try {
+        const { usuarioId } = req.body;
+
+        if (!usuarioId) {
+            return res.status(400).json({ mensaje: "Falta usuarioId en el body." });
+        }
+
+        const receta = await Receta.findById(req.params.id);
+        if (!receta) {
+            return res.status(404).json({ mensaje: "Receta no encontrada." });
+        }
+
+        // Verificar si ya dio like
+        const yaDioLike = receta.likes?.some(
+            (id) => id.toString() === usuarioId
+        );
+
+        if (yaDioLike) {
+            return res.status(200).json({
+                mensaje: "El usuario ya había dado like.",
+                likes: receta.likes.length
+            });
+        }
+
+        receta.likes.push(usuarioId);
+        await receta.save();
+
+        res.status(200).json({
+            mensaje: "Like agregado correctamente.",
+            likes: receta.likes.length
+        });
+
+    } catch (error) {
+        console.error("Error al dar like:", error);
+        res.status(500).json({ mensajeError: error.message });
+    }
+});
+
+/* ============================================================
+   PUT — Quitar like a una receta
+   PUT /recetas/:id/unlike
+   Body esperado: { usuarioId: "..." }
+============================================================ */
+router.put("/:id/unlike", async (req, res) => {
+    try {
+        const { usuarioId } = req.body;
+
+        if (!usuarioId) {
+            return res.status(400).json({ mensaje: "Falta usuarioId en el body." });
+        }
+
+        const receta = await Receta.findById(req.params.id);
+        if (!receta) {
+            return res.status(404).json({ mensaje: "Receta no encontrada." });
+        }
+
+        const likesAntes = receta.likes.length;
+
+        receta.likes = receta.likes.filter(
+            (id) => id.toString() !== usuarioId
+        );
+
+        const likesDespues = receta.likes.length;
+
+        if (likesAntes !== likesDespues) {
+            await receta.save();
+        }
+
+        res.status(200).json({
+            mensaje: "Like removido correctamente.",
+            likes: receta.likes.length
+        });
+
+    } catch (error) {
+        console.error("Error al quitar like:", error);
+        res.status(500).json({ mensajeError: error.message });
+    }
+});
+
 module.exports = router;
+
