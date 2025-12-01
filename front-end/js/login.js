@@ -1,39 +1,44 @@
+const API_URL = "http://localhost:3000";
+
 document.getElementById("formLogin").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const nombreUsuarioOCorreo = document.getElementById("nombreUsuarioOCorreo").value.trim();
-    const contrasenia = document.getElementById("contrasenia").value.trim();
-    const errorBox = document.getElementById("loginError");
+    const msg = document.getElementById("mensaje-login");
+    msg.style.display = "none";
 
-    errorBox.classList.add("d-none");
-    errorBox.textContent = "";
+    const identificador = document.getElementById("identificador").value.trim();
+    const contrasenia = document.getElementById("contrasenia").value.trim();
 
     try {
-        const respuesta = await fetch("http://localhost:3000/usuarios/validar-credenciales", {
+        const res = await fetch(`${API_URL}/usuarios/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                nombreUsuarioOCorreo,
+                identificador,
                 contrasenia
             })
         });
 
-        const data = await respuesta.json();
+        const data = await res.json();
 
-        if (!respuesta.ok) {
-            errorBox.textContent = data.mensaje || "Credenciales incorrectas";
-            errorBox.classList.remove("d-none");
+        if (!res.ok) {
+            msg.style.display = "block";
+            msg.innerHTML = `<div class="alert alert-danger">${data.mensaje || "Credenciales incorrectas."}</div>`;
             return;
         }
 
-        // Guardar usuario en sessionStorage
-        sessionStorage.setItem("usuario", JSON.stringify(data.usuario));
+        localStorage.setItem("usuarioId", data.usuario._id);
+        localStorage.setItem("nombreUsuario", data.usuario.nombreUsuario);
 
-        // Redirigir al inicio
-        window.location.href = "/front-end/pagina-principal.html";
+        msg.style.display = "block";
+        msg.innerHTML = `<div class="alert alert-success">Inicio de sesión exitoso.</div>`;
+
+        setTimeout(() => {
+            window.location.href = "pagina-principal.html";
+        }, 1200);
 
     } catch (error) {
-        errorBox.textContent = "Error de conexión con el servidor";
-        errorBox.classList.remove("d-none");
+        msg.style.display = "block";
+        msg.innerHTML = `<div class="alert alert-danger">Error de conexión.</div>`;
     }
 });

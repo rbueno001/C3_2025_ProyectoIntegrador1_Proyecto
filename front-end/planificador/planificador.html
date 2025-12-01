@@ -3,167 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planificador Semanal | Gastro Works</title>
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- CSS Global -->
-    <link rel="stylesheet" href="/front-end/css/theme.css">
+    <title>Planificador Semanal</title>
+    <link rel="stylesheet" href="cine.css">
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg bg-vino">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
-                <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
-            </a>
+<!-- NAVBAR -->
+<nav style="background-color: var(--vino); padding: 10px;">
+    <a href="index.html">
+        <img src="imgs/logo.png" alt="Logo de la aplicación" style="height:50px;">
+    </a>
+</nav>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarMenu" aria-controls="navbarMenu"
-                aria-expanded="false" aria-label="Mostrar menú">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<h1>Planificador Semanal</h1>
 
-            <div class="collapse navbar-collapse justify-content-end" id="navbarMenu">
-                <ul class="navbar-nav align-items-lg-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/front-end/pagina-principal.html">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/front-end/buscar-recetas.html">Recetas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Planificador</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Favoritos</a>
-                    </li>
-                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                        <a class="btn btn-sm btn-light rounded-pill fw-semibold" href="/front-end/login.html">
-                            Iniciar sesión
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<p>Organiza tus comidas semanales.</p>
 
-
-    <!-- CONTENIDO -->
-    <div class="container py-4">
-
-        <h2 class="text-center mb-3 fw-bold" style="color: var(--vino);">
-            Planificador Semanal
-        </h2>
-
-        <p class="text-center mb-4">
-            Selecciona recetas para tus comidas de la semana y genera una <strong>lista de compras automática</strong>.
-        </p>
-
-        <!-- SECCIÓN: AGREGAR DÍA -->
-        <div class="text-center mb-4">
-            <button id="btnAgregarDia" class="btn btn-vino">
-                <span class="btn-plus-icon">+</span> Agregar día
-            </button>
-        </div>
-
-        <!-- LISTA DE DÍAS -->
-        <div id="contenedorDias"></div>
-
-        <!-- GENERAR LISTA DE COMPRAS -->
-        <div class="text-center mt-4">
-            <a href="/front-end/planificador/lista-compras.html" class="btn btn-vino btn-lg">
-                Generar lista de compras
-            </a>
-        </div>
-
-    </div>
-
-    <script>
-        /* ============================
-           PLANIFICADOR FUNCIONAL
-           (Mobile-first, accesible)
-        =============================*/
-
-        const btnAgregarDia = document.getElementById("btnAgregarDia");
-        const contenedorDias = document.getElementById("contenedorDias");
-
-        let contadorDias = 0;
-
-        btnAgregarDia.addEventListener("click", () => {
-            contadorDias++;
-
-            const diaDiv = document.createElement("div");
-            diaDiv.classList.add("card", "p-3", "mb-3");
-            diaDiv.style.border = "2px solid var(--vino)";
-            diaDiv.style.borderRadius = "12px";
-
-            diaDiv.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h5 class="fw-bold mb-0">Día ${contadorDias}</h5>
-                    <button class="btn btn-excluir btn-sm btnEliminarDia" aria-label="Eliminar día">
-                        Eliminar
-                    </button>
-                </div>
-
-                <label for="buscador${contadorDias}" class="form-label fw-semibold">
-                    Buscar receta
-                </label>
-
-                <input 
-                    type="text" 
-                    id="buscador${contadorDias}" 
-                    placeholder="Escriba un ingrediente o nombre de receta"
-                    class="form-control input-custom mb-2"
-                    aria-label="Buscar receta para este día"
-                >
-
-                <button class="btn btn-vino btn-sm w-100 mb-2 btnAgregarReceta">
-                    Agregar receta al día
-                </button>
-
-                <ul class="list-group listaRecetas"></ul>
-            `;
-
-            contenedorDias.appendChild(diaDiv);
-
-            // Acción: eliminar día
-            diaDiv.querySelector(".btnEliminarDia").addEventListener("click", () => {
-                diaDiv.remove();
-            });
-
-            // Acción: agregar receta escrita
-            diaDiv.querySelector(".btnAgregarReceta").addEventListener("click", () => {
-                const input = diaDiv.querySelector("input");
-                const lista = diaDiv.querySelector(".listaRecetas");
-
-                const texto = input.value.trim();
-                if (!texto) return;
-
-                const li = document.createElement("li");
-                li.classList.add("list-group-item");
-                li.innerHTML = `
-                    ${texto}
-                    <button class="btn btn-excluir btn-sm float-end btnQuitarReceta" aria-label="Quitar receta">
-                        Quitar
-                    </button>
-                `;
-
-                lista.appendChild(li);
-                input.value = "";
-
-                // Acción: quitar receta
-                li.querySelector(".btnQuitarReceta").addEventListener("click", () => {
-                    li.remove();
-                });
-            });
-        });
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Contenido del planificador -->
+<section>
+    <label for="semana">Seleccione una semana:</label>
+    <input type="week" id="semana" name="semana">
+</section>
 
 </body>
 </html>

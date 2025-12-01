@@ -1,98 +1,164 @@
-/* ============================================
-   LISTA DE COMPRAS
-   – Lee el menú semanal desde localStorage
-   – Consulta las recetas seleccionadas
-   – Agrupa ingredientes (nombre + unidad)
-============================================ */
+// ==========================================
+// CONFIG
+// ==========================================
+const API_URL = "http://localhost:3000";
 
-async function generarListaCompras() {
-    const contLista = document.getElementById("lista-compras");
-    const infoSemana = document.getElementById("info-semana");
-    const mensajeLista = document.getElementById("mensaje-lista");
+// Inicializar al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+    cargarListaCompras();
+    inicializarBotones();
+});
 
-    contLista.innerHTML = "";
-    infoSemana.textContent = "";
-    mensajeLista.innerHTML = "";
+// ==========================================
+// CARGAR LISTA: RECETAS INDIVIDUALES + MENÚ SEMANAL
+// ==========================================
+async function cargarListaCompras() {
+    const tabla = document.getElementById("cuerpo-lista-compras") ||
+                  document.getElementById("tablaCompras");
 
-    const menuGuardado = localStorage.getItem("menuSemanal");
+    if (!tabla) return;
 
-    if (!menuGuardado) {
-        mensajeLista.innerHTML = `
-            <div class="alert alert-warning mt-2">
-                No hay un menú semanal guardado. Vuelva al planificador y configure el menú.
-            </div>
-        `;
-        return;
-    }
+    tabla.innerHTML = "";
 
-    const menu = JSON.parse(menuGuardado);
-    infoSemana.textContent = menu.semanaTexto || "Menú sin descripción.";
+    // Lista desde recetas individuales
+    const listaIndividual = JSON.parse(localStorage.getItem("listaCompras")) || [];
 
-    // Obtener todos los IDs de receta seleccionados
-    const idsRecetas = menu.dias
-        .map(d => d.recetaId)
-        .filter(id => id); // quitar nulos o vacíos
+    // Lista desde menú semanal
+    const menuSemanal = JSON.parse(localStorage.getItem("menuSemanal")) || {};
+    const dias = Object.values(menuSemanal).filter(r => r && r.recetaId);
 
-    if (!idsRecetas.length) {
-        mensajeLista.innerHTML = `
-            <div class="alert alert-info mt-2">
-                El menú semanal no tiene recetas seleccionadas.
-            </div>
-        `;
-        return;
-    }
+    let listaMenu = [];
 
-    // Cargar cada receta y acumular ingredientes
-    const mapaIngredientes = {}; // clave: nombre + unidad
+    // Cargar ingredientes del menú semanal
+    for (const dia in menuSemanal) {
+        const recetaId = menuSemanal[dia]?.recetaId;
+        if (!recetaId) continue;
 
-    for (const id of idsRecetas) {
         try {
-            const res = await fetch(`http://localhost:3000/recetas/${id}`);
+            const res = await fetch(`${API_URL}/recetas/${recetaId}`);
             const receta = await res.json();
 
-            (receta.ingredientes || []).forEach(ing => {
-                const clave = `${ing.nombre.toLowerCase()}|${ing.unidad}`;
-                if (!mapaIngredientes[clave]) {
-                    mapaIngredientes[clave] = {
-                        nombre: ing.nombre,
-                        unidad: ing.unidad,
-                        cantidad: parseFloat(ing.cantidad) || 0
-                    };
-                } else {
-                    mapaIngredientes[clave].cantidad += parseFloat(ing.cantidad) || 0;
-                }
-            });
-
+            if (Array.isArray(receta.ingredientes)) {
+                listaMenu.push(...receta.ingredientes);
+            }
         } catch (error) {
-            console.error("Error al cargar receta para lista de compras:", error);
+            console.error("Error cargando receta del menú:", error);
         }
     }
 
-    // Mostrar lista agrupada
-    const claves = Object.keys(mapaIngredientes);
-    if (!claves.length) {
-        mensajeLista.innerHTML = `
-            <div class="alert alert-info mt-2">
-                No se encontraron ingredientes en las recetas seleccionadas.
-            </div>
+    // Unir ambas listas
+    const listaTotal = [...listaIndividual, ...listaMenu];
+
+    // Si no hay nada que mostrar
+    if (listaTotal.length === 0) {
+        tabla.innerHTML = `
+            <tr>
+                <td colspan="4" class="text-center text-muted">
+                    No hay ingredientes en la lista de compras.
+                </td>
+            </tr>
         `;
         return;
     }
 
-    claves.forEach(clave => {
-        const item = mapaIngredientes[clave];
-        const li = document.createElement("li");
-        li.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center");
+    // Agrupar ingredientes
+    const ingredientesAgrupados = agruparIngredientes(listaTotal);
 
-        li.innerHTML = `
-            <span>${item.nombre}</span>
-            <span class="badge bg-dark rounded-pill">
-                ${item.cantidad} ${item.unidad}
-            </span>
+    // Guardar para ediciones
+    window._listaCompras = ingredientesAgrupados;
+
+    // Renderizar tabla
+    renderizarTabla();
+}
+
+// ==========================================
+// AGRUPAR INGREDIENTES REPETIDOS
+// ==========================================
+function agruparIngredientes(lista) {
+    const mapa = {};
+
+    lista.forEach(ing => {
+        if (!ing.nombre) return;
+
+        const nombre = ing.nombre.trim().toLowerCase();
+        const unidad = ing.unidad || "";
+        const key = `${nombre}_${unidad}`;
+
+        if (!mapa[key]) {
+            mapa[key] = { nombre: ing.nombre, cantidad: 0, unidad };
+        }
+
+        const cantidadNum = parseFloat(ing.cantidad) || 0;
+        mapa[key].cantidad += cantidadNum;
+    });
+
+    Object.values(mapa).forEach(ing => {
+        ing.cantidad = Number(ing.cantidad.toFixed(2));
+    });
+
+    return mapa;
+}
+
+// ==========================================
+// RENDER TABLA
+// ==========================================
+function renderizarTabla() {
+    const tabla = document.getElementById("cuerpo-lista-compras") ||
+                  document.getElementById("tablaCompras");
+
+    tabla.innerHTML = "";
+
+    const lista = window._listaCompras;
+
+    if (!lista || Object.keys(lista).length === 0) {
+        tabla.innerHTML = `
+            <tr>
+                <td colspan="4" class="text-center text-muted">
+                    No hay ingredientes en la lista.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    Object.entries(lista).forEach(([key, ing]) => {
+        const fila = document.createElement("tr");
+
+        fila.innerHTML = `
+            <td>${ing.nombre}</td>
+            <td>${ing.cantidad}</td>
+            <td>${ing.unidad}</td>
+            <td class="text-center">
+                <button class="btn btn-sm btn-outline-danger" onclick="eliminarIngrediente('${key}')">
+                    ✕
+                </button>
+            </td>
         `;
 
-        contLista.appendChild(li);
+        tabla.appendChild(fila);
     });
 }
 
-document.addEventListener("DOMContentLoaded", generarListaCompras);
+// ==========================================
+// ELIMINAR UN INGREDIENTE
+// ==========================================
+function eliminarIngrediente(key) {
+    delete window._listaCompras[key];
+    renderizarTabla();
+}
+
+// ==========================================
+// VACÍAR LISTA COMPLETA
+// ==========================================
+function inicializarBotones() {
+    const btnVaciar = document.getElementById("btnVaciar");
+
+    if (!btnVaciar) return;
+
+    btnVaciar.addEventListener("click", () => {
+        // Vaciar ambas listas
+        localStorage.removeItem("listaCompras");
+        window._listaCompras = {};
+        renderizarTabla();
+    });
+}

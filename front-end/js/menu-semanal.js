@@ -1,110 +1,98 @@
-/* ============================================
-   MENÚ SEMANAL
-   – Permite seleccionar una receta por día
-   – Guarda el plan en localStorage
-   – Se usa luego en lista-compras.html
-============================================ */
+const API_URL = "http://localhost:3000";
 
-const DIAS_SEMANA = [
-    "Lunes", "Martes", "Miércoles",
-    "Jueves", "Viernes", "Sábado", "Domingo"
-];
+/* ============================================================
+   INICIALIZACIÓN
+============================================================ */
+document.addEventListener("DOMContentLoaded", async () => {
+    await cargarRecetas();
+    cargarMenuGuardado();
+});
 
+/* ============================================================
+   CARGAR TODAS LAS RECETAS DEL BACKEND
+============================================================ */
 let recetasDisponibles = [];
 
-/* Cargar recetas desde el backend para las listas desplegables */
-async function cargarRecetasParaMenu() {
+async function cargarRecetas() {
     try {
-        const respuesta = await fetch("http://localhost:3000/recetas");
-        const datos = await respuesta.json();
-        recetasDisponibles = datos || [];
-        construirTablaMenu();
+        const res = await fetch(`${API_URL}/recetas`);
+        recetasDisponibles = await res.json();
+        llenarSelects();
     } catch (error) {
-        console.error("Error al cargar recetas para menú:", error);
+        console.error("Error al cargar recetas:", error);
     }
 }
 
-/* Construir la tabla con un select por día */
-function construirTablaMenu() {
-    const cuerpo = document.getElementById("tabla-menu");
-    cuerpo.innerHTML = "";
+/* ============================================================
+   LLENAR LOS SELECTS DE CADA DÍA
+============================================================ */
+function llenarSelects() {
+    const selects = document.querySelectorAll("select[data-dia]");
 
-    DIAS_SEMANA.forEach((dia, indice) => {
-        const fila = document.createElement("tr");
+    selects.forEach(select => {
+        // Limpiar opciones previas
+        select.innerHTML = `
+            <option value="">Seleccione una receta...</option>
+        `;
 
-        const celdaDia = document.createElement("td");
-        celdaDia.textContent = dia;
-
-        const celdaSelect = document.createElement("td");
-        const select = document.createElement("select");
-        select.classList.add("form-select", "input-custom");
-        select.dataset.diaIndex = indice;
-
-        const opcionVacia = document.createElement("option");
-        opcionVacia.value = "";
-        opcionVacia.textContent = "Seleccione una receta...";
-        select.appendChild(opcionVacia);
-
-        recetasDisponibles.forEach(r => {
+        recetasDisponibles.forEach(receta => {
             const op = document.createElement("option");
-            op.value = r._id;
-            op.textContent = r.titulo;
+            op.value = receta._id;
+            op.textContent = receta.titulo;
             select.appendChild(op);
         });
-
-        celdaSelect.appendChild(select);
-
-        fila.appendChild(celdaDia);
-        fila.appendChild(celdaSelect);
-        cuerpo.appendChild(fila);
     });
-
-    cargarMenuGuardado();
 }
 
-/* Guardar menú semanal en localStorage */
-document.getElementById("btn-guardar-menu").addEventListener("click", () => {
-    const semanaTexto = document.getElementById("semanaTexto").value || "";
-    const selects = document.querySelectorAll("#tabla-menu select");
+/* ============================================================
+   GUARDAR MENÚ DE UN DÍA
+============================================================ */
+const botonesGuardar = document.querySelectorAll("[data-guardar]");
 
-    const menu = {
-        semanaTexto,
-        dias: []
-    };
+botonesGuardar.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const dia = btn.dataset.guardar; // lunes, martes, etc.
+        const select = document.querySelector(`select[data-dia='${dia}']`);
 
-    selects.forEach((sel, idx) => {
-        menu.dias.push({
-            dia: DIAS_SEMANA[idx],
-            recetaId: sel.value || null
-        });
+        guardarDia(dia, select.value);
     });
+});
+
+function guardarDia(dia, recetaId) {
+    const menu = JSON.parse(localStorage.getItem("menuSemanal")) || {};
+
+    menu[dia] = {
+        recetaId: recetaId || null
+    };
 
     localStorage.setItem("menuSemanal", JSON.stringify(menu));
 
-    const mensaje = document.getElementById("mensaje-menu");
-    mensaje.innerHTML = `
-        <div class="alert alert-success mt-2">
-            Menú semanal guardado correctamente.
-        </div>
-    `;
-});
+    mostrarMensaje(`Menú del día ${dia} guardado correctamente.`);
+}
 
-/* Cargar menú guardado si existe */
+/* ============================================================
+   CARGAR MENÚ GUARDADO
+============================================================ */
 function cargarMenuGuardado() {
-    const menuGuardado = localStorage.getItem("menuSemanal");
-    if (!menuGuardado) return;
+    const menu = JSON.parse(localStorage.getItem("menuSemanal")) || {};
 
-    const menu = JSON.parse(menuGuardado);
-    document.getElementById("semanaTexto").value = menu.semanaTexto || "";
-
-    const selects = document.querySelectorAll("#tabla-menu select");
-
-    menu.dias.forEach((item, idx) => {
-        if (selects[idx]) {
-            selects[idx].value = item.recetaId || "";
+    Object.entries(menu).forEach(([dia, info]) => {
+        const select = document.querySelector(`select[data-dia='${dia}']`);
+        if (select) {
+            select.value = info.recetaId || "";
         }
     });
 }
 
-/* Inicialización */
-document.addEventListener("DOMContentLoaded", cargarRecetasParaMenu);
+/* ============================================================
+   MENSAJE DE CONFIRMACIÓN
+============================================================ */
+function mostrarMensaje(texto) {
+    const contenedor = document.getElementById("mensajeMenu");
+
+    contenedor.innerHTML = `
+        <div class="alert alert-success mt-3">${texto}</div>
+    `;
+
+    setTimeout(() => (contenedor.innerHTML = ""), 1800);
+}

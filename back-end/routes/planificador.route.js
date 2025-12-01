@@ -2,8 +2,8 @@
 const express = require("express");
 const router = express.Router();
 
-// Modelo
-const Planificador = require("../models/planificador.model");
+/*// Modelo
+const Planificador = require("../models/planificador.model"); */
 
 // POST: Crear plan semanal
 router.post("/", async (req, res) => {

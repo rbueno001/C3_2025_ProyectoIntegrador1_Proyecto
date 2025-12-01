@@ -1,119 +1,132 @@
-// Captura del formulario
-const form = document.getElementById("formReceta");
+const API_URL = "http://localhost:3000";
 
-form.addEventListener("submit", async (e) => {
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("agregar-ingrediente").addEventListener("click", agregarIngrediente);
+    document.getElementById("agregar-paso").addEventListener("click", agregarPaso);
+    document.getElementById("form-receta").addEventListener("submit", enviarReceta);
+});
+
+/* Ingredientes */
+function agregarIngrediente() {
+    const cont = document.getElementById("ingredientes-lista");
+
+    const fila = document.createElement("div");
+    fila.classList.add("row", "mt-3", "ingrediente-item");
+
+    fila.innerHTML = `
+        <div class="col-md-4">
+            <input class="form-control" placeholder="Ingrese el ingrediente" name="ingrediente[]">
+        </div>
+        <div class="col-md-4">
+            <input class="form-control" placeholder="Ingrese la cantidad" name="cantidad[]">
+        </div>
+        <div class="col-md-4">
+            <select class="form-select" name="unidad[]">
+                <option disabled selected>Seleccione la medida</option>
+                <option>g</option>
+                <option>kg</option>
+                <option>ml</option>
+                <option>l</option>
+                <option>taza</option>
+                <option>cucharada</option>
+                <option>unidad</option>
+            </select>
+        </div>
+    `;
+
+    cont.appendChild(fila);
+}
+
+/* Pasos */
+function agregarPaso() {
+    const cont = document.getElementById("pasos-lista");
+    const total = cont.querySelectorAll(".paso-item").length + 1;
+
+    const paso = document.createElement("div");
+    paso.classList.add("mt-3", "paso-item");
+
+    paso.innerHTML = `
+        <label class="form-label paso-titulo">Paso ${total}</label>
+        <textarea class="form-control mb-2" name="paso_descripcion[]" placeholder="Describa el paso"></textarea>
+        <label class="form-label">Foto o video del paso (opcional):</label>
+        <input type="file" class="form-control mb-3" name="paso_media_${total}">
+    `;
+
+    cont.appendChild(paso);
+}
+
+/* Enviar */
+async function enviarReceta(e) {
     e.preventDefault();
 
-    const nombre = document.getElementById("nombreReceta").value;
-    const categoria = document.getElementById("categoria").value;
+    const mensaje = document.getElementById("mensaje-confirmacion");
+    mensaje.style.display = "none";
 
-    // Ingredientes
-    const ingredienteItems = document.querySelectorAll("#contenedorIngredientes .ingrediente-item");
-    let ingredientes = [];
-
-    ingredienteItems.forEach(item => {
-        const nombreIng = item.querySelector("input[placeholder='Ingrediente']").value;
-        const cantidad = item.querySelector("input[placeholder='Cantidad']").value;
-        const unidad = item.querySelector("select").value;
-
-        ingredientes.push({ nombre: nombreIng, cantidad, unidad });
-    });
-
-    // Pasos
-    const pasoItems = document.querySelectorAll("#contenedorPasos .paso-item");
-    let pasos = [];
-    let videos = [];
-
-    pasoItems.forEach((item, index) => {
-        const descripcion = item.querySelector("textarea").value;
-        const file = item.querySelector("input[type='file']").files[0] || null;
-
-        pasos.push({ descripcion });
-
-        if (file) {
-            videos.push(file);
-        }
-    });
-
-    // Obtener ID del autor desde sesión
-    const usuarioLogeado = JSON.parse(localStorage.getItem("usuario"));
-    const autor = usuarioLogeado?.id;
-
-    if (!autor) {
-        alert("Debe iniciar sesión para registrar una receta.");
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (!usuario || !usuario._id) {
+        alert("Debe iniciar sesión para publicar recetas.");
         return;
     }
 
-    // FormData para enviar todo al backend
     const formData = new FormData();
+    formData.append("titulo", document.querySelector("input[name='nombre_receta']").value);
+    formData.append("autorNombre", document.querySelector("input[name='autor']").value);
+    formData.append("categoria", document.querySelector("select[name='categoria']").value);
+    formData.append("complejidad", document.querySelector("select[name='complejidad']").value);
+    formData.append("porciones", document.querySelector("input[name='porciones']").value);
+    formData.append("tiempoTotal", document.querySelector("input[name='tiempo']").value);
+    formData.append("descripcion", document.querySelector("textarea[name='descripcion']").value);
 
-    formData.append("titulo", nombre);
-    formData.append("categoria", categoria);
-    formData.append("autor", autor);
+    const imagenPrincipal = document.querySelector("input[name='foto_principal']").files[0];
+    if (imagenPrincipal) formData.append("imagenPrincipal", imagenPrincipal);
+
+    /* Ingredientes */
+    const ingredientes = [];
+    document.querySelectorAll(".ingrediente-item").forEach(item => {
+        ingredientes.push({
+            nombre: item.querySelector("input[name='ingrediente[]']").value,
+            cantidad: item.querySelector("input[name='cantidad[]']").value,
+            unidad: item.querySelector("select[name='unidad[]']").value
+        });
+    });
     formData.append("ingredientes", JSON.stringify(ingredientes));
+
+    /* Pasos */
+    const pasos = [];
+    document.querySelectorAll(".paso-item").forEach((item, index) => {
+        pasos.push({
+            instruccion: item.querySelector("textarea").value
+        });
+
+        const archivo = item.querySelector("input[type='file']").files[0];
+        if (archivo) formData.append(`pasoArchivo_${index}`, archivo);
+    });
     formData.append("pasos", JSON.stringify(pasos));
 
-    videos.forEach(video => {
-        formData.append("videosPasos", video);
-    });
+    /* Usuario que registra */
+    formData.append("usuarioId", usuario._id);
 
     try {
-        const respuesta = await fetch("http://localhost:3000/recetas", {
+        const res = await fetch(`${API_URL}/recetas`, {
             method: "POST",
             body: formData
         });
 
-        const resultado = await respuesta.json();
+        const data = await res.json();
 
-        if (respuesta.ok) {
-            alert("Receta registrada correctamente.");
-            form.reset();
-        } else {
-            alert("Error al registrar receta: " + resultado.mensajeError);
+        if (!res.ok) {
+            alert(data.mensaje || "No se pudo guardar la receta");
+            return;
         }
 
+        mensaje.textContent =
+            "Su receta ha sido recibida y será publicada una vez que esté aprobada por el administrador.";
+        mensaje.style.display = "block";
+
+        document.getElementById("form-receta").reset();
+
     } catch (error) {
-        alert("Error de conexión: " + error.message);
+        console.error("Error:", error);
+        alert("Error al conectar con el servidor.");
     }
-});
-
-// INGREDIENTES DINÁMICOS
-document.getElementById("btnAgregarIngrediente").addEventListener("click", () => {
-    const cont = document.getElementById("contenedorIngredientes");
-
-    cont.insertAdjacentHTML("beforeend", `
-        <div class="row g-2 mb-2 ingrediente-item">
-            <div class="col-12 col-md-5">
-                <input type="text" class="form-control input-custom" placeholder="Ingrediente" required>
-            </div>
-            <div class="col-12 col-md-3">
-                <input type="number" class="form-control input-custom" placeholder="Cantidad" min="0" step="0.01" required>
-            </div>
-            <div class="col-12 col-md-3">
-                <select class="form-select input-custom" required>
-                    <option value="" disabled selected>Unidad</option>
-                    <option value="g">g</option>
-                    <option value="kg">kg</option>
-                    <option value="ml">ml</option>
-                    <option value="l">l</option>
-                    <option value="cucharadita">Cucharadita</option>
-                    <option value="cucharada">Cucharada</option>
-                    <option value="taza">Taza</option>
-                    <option value="unidad">Unidad</option>
-                </select>
-            </div>
-        </div>
-    `);
-});
-
-// PASOS DINÁMICOS
-document.getElementById("btnAgregarPaso").addEventListener("click", () => {
-    const cont = document.getElementById("contenedorPasos");
-
-    cont.insertAdjacentHTML("beforeend", `
-        <div class="mb-3 paso-item">
-            <textarea class="form-control input-custom" placeholder="Describa el paso" required></textarea>
-            <input type="file" accept="video/*" class="form-control mt-2">
-        </div>
-    `);
-});
+}

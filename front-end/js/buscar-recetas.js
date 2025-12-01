@@ -1,94 +1,175 @@
-/* ============================================
-   BÚSQUEDA DE RECETAS
-   – Carga todas las recetas desde el backend
-   – Filtra por texto, ingrediente y dificultad
-============================================ */
-
+/* ============================================================
+   VARIABLES
+============================================================ */
 let todasLasRecetas = [];
 
+document.addEventListener("DOMContentLoaded", () => {
+    cargarRecetas();
+    inicializarEventos();
+});
+
+/* ============================================================
+   CARGAR TODAS LAS RECETAS
+============================================================ */
 async function cargarRecetas() {
     try {
-        const respuesta = await fetch("http://localhost:3000/recetas");
-        const datos = await respuesta.json();
-        todasLasRecetas = datos || [];
-        mostrarRecetas(todasLasRecetas);
+        const res = await fetch("http://localhost:3000/recetas");
+        const data = await res.json();
+        todasLasRecetas = Array.isArray(data) ? data : [];
+        renderizarRecetas(todasLasRecetas);
     } catch (error) {
-        console.error("Error al cargar recetas:", error);
+        console.error("Error cargando recetas:", error);
     }
 }
 
-function mostrarRecetas(lista) {
-    const contenedor = document.getElementById("contenedor-recetas");
-    const mensajeSinResultados = document.getElementById("mensaje-sin-resultados");
+/* ============================================================
+   EVENTOS
+============================================================ */
+function inicializarEventos() {
 
-    contenedor.innerHTML = "";
+    document.getElementById("form-buscar").addEventListener("submit", (e) => {
+        e.preventDefault();
+        aplicarFiltros();
+    });
 
-    if (!lista.length) {
-        mensajeSinResultados.classList.remove("d-none");
+    document.getElementById("btn-agregar-ingrediente").addEventListener("click", () => {
+        const fila = crearFilaFiltroIngrediente();
+        document.getElementById("contenedor-filtros-ingredientes").appendChild(fila);
+    });
+
+    document.getElementById("btn-limpiar").addEventListener("click", limpiarFiltros);
+
+    document.getElementById("contenedor-filtros-ingredientes").addEventListener("click", (e) => {
+        if (e.target.classList.contains("btn-eliminar-filtro")) {
+            const fila = e.target.closest(".filtro-ingrediente-row");
+            const total = document.querySelectorAll(".filtro-ingrediente-row").length;
+            if (total > 1) fila.remove();
+        }
+    });
+
+    document.getElementById("btnBuscarNombre").addEventListener("click", buscarPorNombre);
+}
+
+/* ============================================================
+   BUSCAR POR NOMBRE
+============================================================ */
+function buscarPorNombre() {
+    const texto = document.getElementById("buscarPorNombre").value.trim().toLowerCase();
+
+    if (texto === "") {
+        renderizarRecetas(todasLasRecetas);
         return;
     }
 
-    mensajeSinResultados.classList.add("d-none");
+    const filtradas = todasLasRecetas.filter(receta =>
+        receta.titulo && receta.titulo.toLowerCase().includes(texto)
+    );
+
+    renderizarRecetas(filtradas);
+
+    document.getElementById("mensaje-sin-resultados")
+        .classList.toggle("d-none", filtradas.length > 0);
+}
+
+/* ============================================================
+   FILTROS DE INGREDIENTES
+============================================================ */
+function crearFilaFiltroIngrediente() {
+    const fila = document.createElement("div");
+    fila.className = "row g-2 filtro-ingrediente-row align-items-center mb-2";
+
+    fila.innerHTML = `
+        <div class="col-md-3">
+            <select class="form-select input-custom filtro-tipo">
+                <option value="con">Con este ingrediente</option>
+                <option value="sin">Sin este ingrediente</option>
+            </select>
+        </div>
+
+        <div class="col-md-7">
+            <input type="text" class="form-control input-custom filtro-nombre"
+                   placeholder="Nombre del ingrediente...">
+        </div>
+
+        <div class="col-md-2 d-grid">
+            <button type="button" class="btn btn-outline-secondary btn-eliminar-filtro">
+                Quitar
+            </button>
+        </div>
+    `;
+    return fila;
+}
+
+function limpiarFiltros() {
+    const filas = document.querySelectorAll(".filtro-ingrediente-row");
+    filas.forEach((fila, i) => {
+        if (i === 0) {
+            fila.querySelector(".filtro-nombre").value = "";
+            fila.querySelector(".filtro-tipo").value = "con";
+        } else {
+            fila.remove();
+        }
+    });
+
+    renderizarRecetas(todasLasRecetas);
+}
+
+function aplicarFiltros() {
+    const filas = document.querySelectorAll(".filtro-ingrediente-row");
+    const filtros = [];
+
+    filas.forEach(fila => {
+        const tipo = fila.querySelector(".filtro-tipo").value;
+        const nombre = fila.querySelector(".filtro-nombre").value.trim().toLowerCase();
+        if (nombre !== "") filtros.push({ tipo, nombre });
+    });
+
+    if (filtros.length === 0) {
+        renderizarRecetas(todasLasRecetas);
+        return;
+    }
+
+    const resultado = todasLasRecetas.filter(receta => {
+        const ing = receta.ingredientes || [];
+
+        return filtros.every(filtro => {
+            const contiene = ing.some(i => i.nombre?.toLowerCase().includes(filtro.nombre));
+            return filtro.tipo === "con" ? contiene : !contiene;
+        });
+    });
+
+    renderizarRecetas(resultado);
+
+    document.getElementById("mensaje-sin-resultados")
+        .classList.toggle("d-none", resultado.length > 0);
+}
+
+/* ============================================================
+   MOSTRAR RESULTADOS
+============================================================ */
+function renderizarRecetas(lista) {
+    const cont = document.getElementById("contenedor-recetas");
+    cont.innerHTML = "";
+
+    if (!lista.length) return;
 
     lista.forEach(receta => {
         const col = document.createElement("div");
-        col.classList.add("col-12", "col-sm-6", "col-lg-4");
-
-        const imagen = receta.imagenPrincipal
-            ? `http://localhost:3000${receta.imagenPrincipal}`
-            : "/imgs/default-recipe.jpg";
+        col.className = "col-12 col-md-6 col-lg-4";
 
         col.innerHTML = `
-            <div class="card shadow-sm h-100">
-                <img src="${imagen}" class="card-img-top fixed-img" alt="${receta.titulo}">
+            <article class="card shadow-sm h-100">
                 <div class="card-body">
-                    <h5 class="card-title text-dark">${receta.titulo}</h5>
-                    <p class="card-text text-muted small">
-                        ${receta.descripcion ? receta.descripcion.substring(0, 90) + "..." : ""}
+                    <h5>${receta.titulo || "Sin título"}</h5>
+                    <p class="text-muted small">${receta.descripcion || "Sin descripción"}</p>
+                    <p class="small text-muted">
+                        Ingredientes: ${
+                            receta.ingredientes?.map(i => i.nombre).join(", ") || "No especificados"
+                        }
                     </p>
-                    <p class="small text-muted mb-1">
-                        <strong>Autor:</strong> ${receta.autor?.nombreUsuario || "Desconocido"}
-                    </p>
-                    <a href="/front-end/detalle-receta.html?id=${receta._id}" class="btn btn-vino btn-sm mt-2">
-                        Ver detalles
-                    </a>
                 </div>
-            </div>
+            </article>
         `;
-
-        contenedor.appendChild(col);
+        cont.appendChild(col);
     });
 }
-
-/* Filtrado principal */
-document.getElementById("form-buscar").addEventListener("submit", (evento) => {
-    evento.preventDefault();
-
-    const texto = document.getElementById("textoBusqueda").value.toLowerCase();
-    const ing = document.getElementById("ingredienteBusqueda").value.toLowerCase();
-    const dificultad = document.getElementById("dificultadBusqueda").value;
-
-    const filtradas = todasLasRecetas.filter(r => {
-        const coincideTexto =
-            !texto ||
-            r.titulo?.toLowerCase().includes(texto) ||
-            r.descripcion?.toLowerCase().includes(texto) ||
-            r.autor?.nombreUsuario?.toLowerCase().includes(texto);
-
-        const coincideIngrediente =
-            !ing ||
-            (r.ingredientes || []).some(i =>
-                i.nombre.toLowerCase().includes(ing)
-            );
-
-        const coincideDificultad =
-            !dificultad || r.dificultad === dificultad;
-
-        return coincideTexto && coincideIngrediente && coincideDificultad;
-    });
-
-    mostrarRecetas(filtradas);
-});
-
-/* Cargar al entrar a la página */
-document.addEventListener("DOMContentLoaded", cargarRecetas);

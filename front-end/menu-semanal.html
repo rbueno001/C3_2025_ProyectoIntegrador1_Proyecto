@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Semanal | Gastro Works</title>
+
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS GLOBAL -->
+    <link rel="stylesheet" href="/front-end/css/theme.css">
+</head>
+
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- NAVBAR GLOBAL -->
+    <div id="navbar-container"></div>
+    <script defer src="/front-end/js/navbar.js"></script>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-fill">
+        <div class="container my-5">
+
+            <div class="container-box mb-4">
+                <h3 class="mb-3">Menú Semanal</h3>
+                <p class="text-muted">
+                    Asigne recetas a cada día de la semana para organizar mejor su planificación.
+                </p>
+            </div>
+
+            <!-- TABLA DEL MENÚ -->
+            <div class="container-box p-3">
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th>Día</th>
+                                <th>Receta seleccionada</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tablaMenu">
+
+                            <!-- Lunes -->
+                            <tr>
+                                <td><strong>Lunes</strong></td>
+                                <td>
+                                    <select class="form-select" data-dia="lunes">
+                                        <option value="">Seleccione una receta...</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-vino btn-sm" data-guardar="lunes">Guardar</button>
+                                </td>
+                            </tr>
+
+                            <!-- Martes -->
+                            <tr>
+                                <td><strong>Martes</strong></td>
+                                <td>
+                                    <select class="form-select" data-dia="martes">
+                                        <option value="">Seleccione una receta...</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-vino btn-sm" data-guardar="martes">Guardar</button>
+                                </td>
+                            </tr>
+
+                            <!-- Miércoles -->
+                            <tr>
+                                <td><strong>Miércoles</strong></td>
+                                <td>
+                                    <select class="form-select" data-dia="miercoles">
+                                        <option value="">Seleccione una receta...</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-vino btn-sm" data-guardar="miercoles">Guardar</button>
+                                </td>
+                            </tr>
+
+                            <!-- Jueves -->
+                            <tr>
+                                <td><strong>Jueves</strong></td>
+                                <td>
+                                    <select class="form-select" data-dia="jueves">
+                                        <option value="">Seleccione una receta...</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-vino btn-sm" data-guardar="jueves">Guardar</button>
+                                </td>
+                            </tr>
+
+                            <!-- Viernes -->
+                            <tr>
+                                <td><strong>Viernes</strong></td>
+                                <td>
+                                    <select class="form-select" data-dia="viernes">
+                                        <option value="">Seleccione una receta...</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-vino btn-sm" data-guardar="viernes">Guardar</button>
+                                </td>
+                            </tr>
+
+                            <!-- Sábado -->
+                            <tr>
+                                <td><strong>Sábado</strong></td>
+                                <td>
+                                    <select class="form-select" data-dia="sabado">
+                                        <option value="">Seleccione una receta...</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-vino btn-sm" data-guardar="sabado">Guardar</button>
+                                </td>
+                            </tr>
+
+                            <!-- Domingo -->
+                            <tr>
+                                <td><strong>Domingo</strong></td>
+                                <td>
+                                    <select class="form-select" data-dia="domingo">
+                                        <option value="">Seleccione una receta...</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-vino btn-sm" data-guardar="domingo">Guardar</button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto py-3 border-top bg-white text-center">
+        © <span id="year"></span> Gastro Works · Todos los derechos reservados.
+        <a href="#">Términos</a> · <a href="#">Privacidad</a>
+    </footer>
+
+    <!-- JS -->
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+
+    <!-- Lógica del menú -->
+    <script src="/front-end/js/menu-semanal.js" defer></script>
+
+</body>
+
+</html>

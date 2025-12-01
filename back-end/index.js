@@ -1,42 +1,34 @@
-require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
-const path = require("path");
 const mongoose = require("mongoose");
+const cors = require("cors");
+require("dotenv").config();
 
-const usuarioRoute = require("./routes/usuario.route");
 const recetaRoute = require("./routes/receta.route");
-
+const usuarioRoute = require("./routes/usuario.route");
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-// CORS
-app.use(cors({
-    origin: "*",
-    methods: "GET,POST,PUT,DELETE",
-    allowedHeaders: "Content-Type, Authorization"
-}));
-
-// JSON
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Archivos estáticos
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static("uploads"));
 
-// Conexión a MongoDB Atlas
-mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log("✅ Conexión a MongoDB Atlas exitosa"))
-    .catch(err => console.error("Error al conectar a MongoDB Atlas:", err));
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log("MongoDB conectado"))
+.catch(err => console.error("Error de conexión:", err));
 
-// Rutas
-app.use("/usuarios", usuarioRoute);
 app.use("/recetas", recetaRoute);
+app.use("/usuarios", usuarioRoute);
 
-
-// Puerto
-const PORT = process.env.PORT || 3000;
+app.get("/", (req, res) => {
+    res.send("Servidor activo");
+});
 
 app.listen(PORT, () => {
-    console.log(`Servidor funcionando en el puerto ${PORT}`);
+    console.log("Servidor corriendo en http://localhost:" + PORT);
 });

@@ -4,75 +4,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mis recetas favoritas | Gastro Works</title>
+  <title>Favoritos | Gastro Works</title>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/front-end/css/theme.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
 </head>
 
-<body class="d-flex flex-column min-vh-100 bg-light">
+<body class="bg-light d-flex flex-column min-vh-100">
 
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg bg-vino">
-    <div class="container">
+  <div id="navbar-container"></div>
+  <script>
+    fetch("componentes/navbar.html")
+      .then(res => res.text())
+      .then(html => document.getElementById("navbar-container").innerHTML = html)
+      .catch(err => console.error("Error cargando navbar:", err));
+  </script>
 
-      <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
-        <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
-      </a>
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-        aria-label="Mostrar menú">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav align-items-lg-center">
-          <li class="nav-item">
-            <a class="nav-link" href="/front-end/pagina-principal.html">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/front-end/buscar-recetas.html">Recetas</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="/front-end/favoritos.html">Mis favoritas</a>
-          </li>
-        </ul>
+  <main class="flex-fill">
+    <div class="container my-5">
+      <div class="container-box">
+        <h3 class="mb-4 fw-bold">Mis recetas favoritas</h3>
+        <div id="listaFavoritos" class="row g-4">
+          <!-- Tarjetas generadas en favoritos.js -->
+        </div>
       </div>
-
-    </div>
-  </nav>
-
-  <!-- CONTENIDO -->
-  <main class="flex-fill py-4 py-md-5">
-    <div class="container">
-
-      <h1 class="h3 mb-4">Mis recetas favoritas</h1>
-
-      <div id="mensaje-favoritos" class="mb-3"></div>
-
-      <div class="row g-4" id="contenedor-favoritos">
-        <!-- Tarjetas de recetas favoritas generadas por JS -->
-      </div>
-
     </div>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="mt-auto py-3 border-top">
-    <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
-      <div>
-        © <span id="year"></span> Gastro Works · Todos los derechos reservados.
-      </div>
-      <div>
-        <a href="#">Términos</a> · <a href="#">Privacidad</a>
-      </div>
-    </div>
+  <footer class="mt-auto py-3 border-top bg-white text-center">
+    © <span id="year"></span> Gastro Works - Todos los derechos reservados.
+    <a href="#">Términos</a> · <a href="#">Privacidad</a>
   </footer>
 
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/front-end/js/favoritos.js"></script>
-  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+  <script src="js/favoritos.js"></script>
 </body>
 
 </html>

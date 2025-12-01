@@ -20,76 +20,38 @@ body {
     color: var(--texto-oscuro);
 }
 
-html, body {
-    height: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-}
-
-footer {
-    margin-top: auto;
-    padding: 1rem 0;
-    border-top: 1px solid #ddd;
-}
-
-
-
 /* ============================
-   NAVBAR ORIGINAL + AJUSTES NUEVOS
+   NAVBAR (ALINEADO + LOGO PERFECTO)
 ================================*/
 
-.navbar {
-    background: linear-gradient(90deg, var(--vino) 0%, #b3003c 100%);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-
-    /* 🔹 Navbar más delgado */
-    padding-top: 0.3rem;
-    padding-bottom: 0.3rem;
-}
-
-/* LOGO ESTIRADO PARA NAVBAR */
-.logo-navbar {
-    height: 95px;
-    width: auto;
-    object-fit: contain;
-}
-
-.navbar-brand {
-    font-weight: 700;
-    letter-spacing: 0.03em;
-}
-
-/* LINKS BLANCOS Y SUBRAYADO */
-.nav-link {
-    font-weight: 500;
-    position: relative;
-    color: #ffffff !important; /* 🔹 Link blanco */
-    margin-left: 1.2rem; /* 🔹 Separación elegante */
-}
-
-/* Línea animada */
-.nav-link::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -3px;
-    width: 0;
-    height: 2px;
-    background-color: #ffffff;
-    transition: width 0.25s ease-in-out;
-}
-
-.nav-link:hover::after,
-.nav-link.active::after {
+.navbar-gastro {
+    background: linear-gradient(90deg, #800000 0%, #b3003c 100%);
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
     width: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-/* Hamburguesa blanca */
-.navbar-toggler-icon {
-    filter: brightness(0) invert(1);
+.logo-navbar {
+    height: 85px;
+    width: auto;
+}
+
+.navbar-gastro .nav-link {
+    color: #ffffff !important;
+    font-weight: 600;
+    margin: 0 14px;
+    font-size: 1rem;
+}
+
+.navbar-gastro .nav-link:hover {
+    opacity: 0.85;
+}
+
+.navbar-gastro .btn {
+    font-weight: 600;
+    padding: 7px 20px;
+    border-radius: 20px;
 }
 
 /* ============================
@@ -185,15 +147,6 @@ footer {
     object-fit: cover;
 }
 
-.fixed-img {
-    height: 220px;       /* Ajusta si querés más grande o más pequeña */
-    width: 100%;
-    object-fit: cover;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
-}
-
-
 .category-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 18px 34px rgba(0,0,0,0.12);
@@ -285,7 +238,7 @@ footer a {
     font-size: 1rem;
 }
 
-/* TARJETA FORMULARIO */
+/* TARJETA FORM */
 .registro-card {
     background: #fff;
     border: 2px solid var(--vino);
@@ -295,7 +248,6 @@ footer a {
     text-align: center;
 }
 
-/* TÍTULO */
 .titulo-registro {
     font-weight: 800;
     color: var(--vino);
@@ -304,14 +256,12 @@ footer a {
     margin-bottom: 1.5rem;
 }
 
-/* Inputs */
 .input-custom {
     border-radius: 12px !important;
     padding: 0.7rem !important;
     font-size: 1rem;
 }
 
-/* Botón */
 .btn-vino-center {
     background-color: var(--vino);
     color: #fff;
@@ -327,7 +277,6 @@ footer a {
     background-color: var(--vino-oscuro);
 }
 
-/* Link inferior */
 .link-acceso {
     color: var(--vino-oscuro);
     font-weight: bold;
@@ -335,7 +284,6 @@ footer a {
     font-size: 0.95rem;
 }
 
-/* Responsive */
 @media (max-width: 576px) {
     .logo-registro {
         width: 140px;
@@ -349,15 +297,9 @@ footer a {
     .registro-card {
         padding: 1.5rem;
     }
-
-    .logo-navbar {
-        height: 75px;
-    }
 }
 
-/* ============================
-   BOTONES PERSONALIZADOS
-===============================*/
+/* BOTONES PERSONALIZADOS */
 
 .btn-vino {
     background-color: var(--vino);
@@ -378,7 +320,6 @@ footer a {
     outline: none;
 }
 
-/* Botón claro para excluir ingrediente */
 .btn-excluir {
     background-color: #ffffff;
     color: var(--vino);
@@ -387,6 +328,7 @@ footer a {
     padding: 0.65rem 1.4rem;
     font-weight: 600;
     font-size: 0.95rem;
+    transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
 }
 
 .btn-excluir:hover,
@@ -396,7 +338,6 @@ footer a {
     transform: scale(1.03);
 }
 
-/* Icono + */
 .btn-plus-icon {
     font-weight: 900;
     margin-right: 6px;

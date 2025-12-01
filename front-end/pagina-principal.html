@@ -14,283 +14,225 @@
 
 <body>
 
+    <!-- NAVBAR (nuevo método, sin inline, usando fetch) -->
+    <div id="navbar-container"></div>
+    <script src="/front-end/js/navbar.js"></script>
+
     <main class="flex-fill">
 
-    <!-- ⭐ NAVBAR NUEVO (ÚNICO CAMBIO) -->
-    <nav class="navbar navbar-expand-lg bg-vino">
-        <div class="container">
-
-            <!-- LOGO -->
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
-            </a>
-
-            <!-- BOTÓN RESPONSIVE -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                aria-label="Mostrar menú">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- MENÚ -->
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav align-items-lg-center">
-
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/front-end/pagina-principal.html">Inicio</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="/front-end/buscar-recetas.html">Recetas</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Chefs</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Sobre Nosotros</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contacto</a>
-                    </li>
-
-                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-                        <a class="btn btn-sm btn-light rounded-pill fw-semibold" href="/front-end/login.html">
-                            Iniciar sesión
-                        </a>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- ⭐ A PARTIR DE AQUÍ TODO ES TU MISMO CÓDIGO ORIGINAL -->
-
-    <!-- HERO / CAROUSEL + INFO -->
-    <div class="container my-4 my-md-5">
-        <div class="hero-wrapper">
-            <div class="row align-items-center gy-4">
-                <div class="col-md-6 hero-carousel">
-                    <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="position-relative">
-                                    <span class="category-pill">Evento</span>
-                                    <img src="/imgs/pexels-n-voitkevich-5426108.jpg" class="d-block w-100"
-                                        alt="Evento 1">
+        <!-- HERO / CAROUSEL + INFO -->
+        <div class="container my-4 my-md-5">
+            <div class="hero-wrapper">
+                <div class="row align-items-center gy-4">
+                    <div class="col-md-6 hero-carousel">
+                        <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="position-relative">
+                                        <span class="category-pill">Evento</span>
+                                        <img src="/imgs/pexels-n-voitkevich-5426108.jpg" class="d-block w-100"
+                                            alt="Evento 1">
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="position-relative">
+                                        <span class="category-pill">Taller</span>
+                                        <img src="/imgs/pexels-nicola-barts-7936678.jpg" class="d-block w-100"
+                                            alt="Evento 2">
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="position-relative">
+                                        <span class="category-pill">Experiencia</span>
+                                        <img src="/imgs/pexels-yuuilina-10254480.jpg" class="d-block w-100" alt="Evento 3">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="carousel-item">
-                                <div class="position-relative">
-                                    <span class="category-pill">Taller</span>
-                                    <img src="/imgs/pexels-nicola-barts-7936678.jpg" class="d-block w-100"
-                                        alt="Evento 2">
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="position-relative">
-                                    <span class="category-pill">Experiencia</span>
-                                    <img src="/imgs/pexels-yuuilina-10254480.jpg" class="d-block w-100" alt="Evento 3">
-                                </div>
-                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#eventCarousel"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Anterior</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#eventCarousel"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Siguiente</span>
+                            </button>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#eventCarousel"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Anterior</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#eventCarousel"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Siguiente</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="mb-2">
-                        <span class="hero-tag">
-                            • Comunidad gastronómica · Gestión Culinaria
-                        </span>
-                    </div>
-                    <h1 class="hero-title mt-2">
-                        Comparte, valora y mejora tus recetas con otros chefs.
-                    </h1>
-                    <p class="hero-subtitle mt-2">
-                        En <strong>Gastro Works</strong>, los usuarios pueden crear recetas, darles like,
-                        comentar, guardar sus favoritas y participar en eventos culinarios. Un espacio pensado
-                        para estudiantes, chefs y amantes de la cocina.
-                    </p>
-
-                    <div class="hero-actions d-flex flex-wrap gap-2 mt-3">
-                        <a href="#" class="btn btn-vino">
-                            Explorar recetas
-                        </a>
-                        <a href="#" class="btn btn-vino-outline">
-                            Publicar mi receta
-                        </a>
                     </div>
 
-                    <div class="hero-stats mt-3">
-                        <div class="d-flex flex-wrap gap-3">
-                            <div>
-                                <span>250+</span> recetas publicadas
-                            </div>
-                            <div>
-                                <span>80+</span> chefs activos
-                            </div>
-                            <div>
-                                <span>1.2k</span> likes en la última semana
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <span class="hero-tag">
+                                • Comunidad gastronómica · Gestión Culinaria
+                            </span>
+                        </div>
+                        <h1 class="hero-title mt-2">
+                            Comparte, valora y mejora tus recetas con otros chefs.
+                        </h1>
+                        <p class="hero-subtitle mt-2">
+                            En <strong>Gastro Works</strong>, los usuarios pueden crear recetas, darles like,
+                            comentar, guardar sus favoritas y participar en eventos culinarios. Un espacio pensado
+                            para estudiantes, chefs y amantes de la cocina.
+                        </p>
+
+                        <div class="hero-actions d-flex flex-wrap gap-2 mt-3">
+                            <a href="#" class="btn btn-vino">
+                                Explorar recetas
+                            </a>
+                            <a href="#" class="btn btn-vino-outline">
+                                Publicar mi receta
+                            </a>
+                        </div>
+
+                        <div class="hero-stats mt-3">
+                            <div class="d-flex flex-wrap gap-3">
+                                <div>
+                                    <span>250+</span> recetas publicadas
+                                </div>
+                                <div>
+                                    <span>80+</span> chefs activos
+                                </div>
+                                <div>
+                                    <span>1.2k</span> likes en la última semana
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- CATEGORÍAS PRINCIPALES -->
-    <div class="container mt-4 mt-md-5">
-        <div class="section-title">
-            <span></span>
-            <div>
-                <h3 class="mb-0">Recetas mas populares</h3>
-                <small class="text-muted">Encuentra inspiración según el tipo de plato que quieras preparar.</small>
-            </div>
-        </div>
-        <br>
-
-        <!-- Ajuste del grid para que las 5 recetas se mantengan simétricas -->
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-5 g-4">
-
-    <!-- Queque de Naranja -->
-    <div class="col">
-        <a href="detalle-receta.html?id=queque_naranja" class="text-decoration-none">
-            <div class="card shadow-sm h-100">
-                <img src="/imgs/quequedenaranja.png" class="card-img-top fixed-img" alt="Queque de Naranja">
-                <div class="card-body">
-                    <h5 class="card-title text-dark">Queque de Naranja</h5>
-                    <p class="card-text text-muted small">Un postre suave, húmedo y aromático.</p>
-                </div>
-            </div>
-        </a>
-    </div>
-
-    <!-- Huevos Rancheros -->
-    <div class="col">
-        <a href="detalle-receta.html?id=huevos_rancheros" class="text-decoration-none">
-            <div class="card shadow-sm h-100">
-                <img src="/imgs/huevosrancheros.jpg" class="card-img-top fixed-img" alt="Huevos Rancheros">
-                <div class="card-body">
-                    <h5 class="card-title text-dark">Huevos Rancheros</h5>
-                    <p class="card-text text-muted small">Clásico desayuno mexicano con salsa casera.</p>
-                </div>
-            </div>
-        </a>
-    </div>
-
-    <!-- Pollo Asado -->
-    <div class="col">
-        <a href="detalle-receta.html?id=pollo_asado" class="text-decoration-none">
-            <div class="card shadow-sm h-100">
-                <img src="/imgs/polloasado.jpg" class="card-img-top fixed-img" alt="Pollo Asado">
-                <div class="card-body">
-                    <h5 class="card-title text-dark">Pollo Asado</h5>
-                    <p class="card-text text-muted small">Crocante por fuera y jugoso por dentro.</p>
-                </div>
-            </div>
-        </a>
-    </div>
-
-    <!-- Canelones -->
-    <div class="col">
-        <a href="detalle-receta.html?id=canelones" class="text-decoration-none">
-            <div class="card shadow-sm h-100">
-                <img src="/imgs/canelones.png" class="card-img-top fixed-img" alt="Canelones">
-                <div class="card-body">
-                    <h5 class="card-title text-dark">Canelones</h5>
-                    <p class="card-text text-muted small">Rellenos clásicos con salsa casera tradicional.</p>
-                </div>
-            </div>
-        </a>
-    </div>
-
-    <!-- Ensalada de Amaranto -->
-    <div class="col">
-        <a href="detalle-receta.html?id=ensalada_amaranto" class="text-decoration-none">
-            <div class="card shadow-sm h-100">
-                <img src="/imgs/ensalada de aramanto.jpg" class="card-img-top fixed-img" alt="Ensalada de Amaranto con Aguacate y Mango">
-                <div class="card-body">
-                    <h5 class="card-title text-dark">Ensalada de Amaranto</h5>
-                    <p class="card-text text-muted small">Fresca, nutritiva y llena de color.</p>
-                </div>
-                
-            </div>
-        </a>
-    </div>
-
-    </div>
-
-    <section id="events">
+        <!-- CATEGORÍAS PRINCIPALES -->
         <div class="container mt-4 mt-md-5">
-        <div class="section-title">
-            <span></span>
-            <div>
-                <h3 class="mb-0">Eventos culinarios</h3>
-                <small class="text-muted">Disfruta de nuestros proximos eventos.</small>
+            <div class="section-title">
+                <span></span>
+                <div>
+                    <h3 class="mb-0">Recetas más populares</h3>
+                    <small class="text-muted">Encuentra inspiración según el tipo de plato que quieras preparar.</small>
+                </div>
             </div>
+            <br>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-5 g-4">
+
+                <div class="col">
+                    <a href="detalle-receta.html?id=queque_naranja" class="text-decoration-none">
+                        <div class="card shadow-sm h-100">
+                            <img src="/imgs/quequedenaranja.png" class="card-img-top fixed-img" alt="Queque de Naranja">
+                            <div class="card-body">
+                                <h5 class="card-title text-dark">Queque de Naranja</h5>
+                                <p class="card-text text-muted small">Un postre suave, húmedo y aromático.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="detalle-receta.html?id=huevos_rancheros" class="text-decoration-none">
+                        <div class="card shadow-sm h-100">
+                            <img src="/imgs/huevosrancheros.jpg" class="card-img-top fixed-img" alt="Huevos Rancheros">
+                            <div class="card-body">
+                                <h5 class="card-title text-dark">Huevos Rancheros</h5>
+                                <p class="card-text text-muted small">Clásico desayuno mexicano con salsa casera.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="detalle-receta.html?id=pollo_asado" class="text-decoration-none">
+                        <div class="card shadow-sm h-100">
+                            <img src="/imgs/polloasado.jpg" class="card-img-top fixed-img" alt="Pollo Asado">
+                            <div class="card-body">
+                                <h5 class="card-title text-dark">Pollo Asado</h5>
+                                <p class="card-text text-muted small">Crocante por fuera y jugoso por dentro.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="detalle-receta.html?id=canelones" class="text-decoration-none">
+                        <div class="card shadow-sm h-100">
+                            <img src="/imgs/canelones.png" class="card-img-top fixed-img" alt="Canelones">
+                            <div class="card-body">
+                                <h5 class="card-title text-dark">Canelones</h5>
+                                <p class="card-text text-muted small">Rellenos clásicos con salsa casera tradicional.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="detalle-receta.html?id=ensalada_amaranto" class="text-decoration-none">
+                        <div class="card shadow-sm h-100">
+                            <img src="/imgs/ensalada de aramanto.jpg" class="card-img-top fixed-img" alt="Ensalada de Amaranto">
+                            <div class="card-body">
+                                <h5 class="card-title text-dark">Ensalada de Amaranto</h5>
+                                <p class="card-text text-muted small">Fresca, nutritiva y llena de color.</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+
+            <section id="events">
+                <div class="container mt-4 mt-md-5">
+                    <div class="section-title">
+                        <span></span>
+                        <div>
+                            <h3 class="mb-0">Eventos culinarios</h3>
+                            <small class="text-muted">Disfruta de nuestros próximos eventos.</small>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="row row-cols-1 row-cols-md-2 g-4">
+                        <div class="col">
+                            <div class="card h-100 shadow-sm">
+                                <img src="/imgs/cafe.webp" class="card-img-top fixed-img" alt="Feria del café Frailes">
+                                <div class="card-body">
+                                    <h5 class="card-title">Feria del café Frailes</h5>
+                                    <p class="card-text text-muted">
+                                        Fecha: 2 Diciembre de 2025<br>
+                                        Lugar: Feria del Cafe, Frailes, San Jose <br>
+                                        Descripción: Degustación de cafés artesanales y talleres de barismo.
+                                    </p>
+                                    <a href="detalles-evento.html?id=feria_cafe_frailes" class="btn btn-vino">
+                                        Ver Evento
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="card h-100 shadow-sm">
+                                <img src="/imgs/panpizzayfocaccia.jpg" class="card-img-top fixed-img" alt="Masterclass">
+                                <div class="card-body">
+                                    <h5 class="card-title">Masterclass: Panes Pizza & Focaccia</h5>
+                                    <p class="card-text text-muted">
+                                        Fecha: 10 de Diciembre de 2025<br>
+                                        Lugar: Virtual<br>
+                                        Descripción: Aprende a preparar auténticas pizzas y focaccias italianas.
+                                    </p>
+                                    <a href="detalles-evento.html?id=masterclass_panes_pizza_focaccia" class="btn btn-vino">
+                                        Ver Evento
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
         </div>
-        <br>
-            <!-- Cards con eventos culinarios -->
-            <!-- Feria del cafe Frailes -->
-            <div class="row row-cols-1 row-cols-md-2 g-4">
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <img src="/imgs/cafe.webp" class="card-img-top fixed-img" alt="Feria del café Frailes">
-                        <div class="card-body">
-                            <h5 class="card-title">Feria del café Frailes</h5>
-                            <p class="card-text text-muted">Fecha: 2 Diciembre de 2025<br>Lugar: Feria del Cafe, Frailes, San Jose <br>Descripción: Degustación de cafés artesanales y talleres de barismo.</p>
-                             <a href="detalles-evento.html?id=feria_cafe_frailes" class="btn btn-vino">
-                            Ver Evento
-                            </a>
-
-                        </div>
-                    </div>
-                </div>
-                <!-- Masterclass: Panes Pizza &amp; Focaccia -->
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <img src="/imgs/panpizzayfocaccia.jpg" class="card-img-top fixed-img" alt="Masterclass: Panes Pizza & Focaccia">
-                        <div class="card-body">
-                            <h5 class="card-title">Masterclass: Panes Pizza & Focaccia</h5>
-                            <p class="card-text text-muted">Fecha: 10 de Diciembre de 2025<br>Lugar: Virtual<br>Descripción: Aprende a preparar auténticas pizzas y focaccias italianas.</p>
-                            <a href="detalles-evento.html?id=masterclass_panes_pizza_focaccia" class="btn btn-vino">
-                            Ver Evento
-                            </a>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        
-
-            
-
-
-
-
-    </section>
 
     </main>
-    <br>
-    <br>
 
-
-    <!-- FOOTER -->
-   <footer class="mt-auto py-3 border-top">
+    <footer class="mt-auto py-3 border-top">
         <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
             <div>
                 © <span id="year"></span> Gastro Works · Todos los derechos reservados.

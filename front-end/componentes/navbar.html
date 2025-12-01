@@ -1,19 +1,60 @@
-<nav class="navbar navbar-expand-lg bg-vino px-4">
-    <a class="navbar-brand" href="pagina-principal.html">
-        <img src="../imgs/logo.png" alt="Logo de Gastro Works" class="logo-navbar">
-    </a>
+<nav class="navbar navbar-expand-lg navbar-gastro">
+    <div class="container">
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+        <!-- LOGO -->
+        <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
+            <img src="/front-end/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
+        </a>
 
-    <div class="collapse navbar-collapse justify-content-end" id="menu">
-        <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="pagina-principal.html">Inicio</a></li>
-            <li class="nav-item"><a class="nav-link" href="buscar-recetas.html">Buscar recetas</a></li>
-            <li class="nav-item"><a class="nav-link" href="registrar-receta.html">Registrar receta</a></li>
-            <li class="nav-item"><a class="nav-link" href="planificador.html">Planificador</a></li>
-            <li class="nav-item"><a class="nav-link" href="login.html">Iniciar sesión</a></li>
-        </ul>
+        <!-- MENÚ MÓVIL -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+            aria-label="Menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- MENÚ -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center gap-lg-4">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/front-end/pagina-principal.html">Inicio</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/front-end/buscar-recetas.html">Buscar recetas</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/front-end/registrar-receta.html">Registrar receta</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/front-end/favoritos.html">Favoritos</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/front-end/menu-semanal.html">Menú semanal</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/front-end/lista-compras.html">Lista de compras</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="btn btn-light rounded-pill px-3 ms-lg-3" href="/front-end/login.html">
+                        Iniciar sesión
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="btn btn-light rounded-pill px-3" href="/front-end/registrar-usuario.html">
+                        Crear cuenta
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
     </div>
 </nav>

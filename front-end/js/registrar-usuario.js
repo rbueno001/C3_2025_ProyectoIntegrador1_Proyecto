@@ -1,53 +1,69 @@
-/* ============================================================
-   REGISTRO DE USUARIOS
-   Envía los datos al backend para crear un nuevo usuario
-============================================================ */
+const API_URL = "http://localhost:3000";
 
-document.getElementById("formRegistro").addEventListener("submit", async (evento) => {
-    evento.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("formRegistro");
+    const mensaje = document.getElementById("mensaje-registro");
 
-    // Datos enviados al backend
-    const datos = {
-        nombre: document.getElementById("nombre").value.trim(),
-        correo: document.getElementById("correo").value.trim(),
-        nombreUsuario: document.getElementById("usuario").value.trim(),
-        cedula: document.getElementById("cedula").value.trim(),
-        celular: document.getElementById("celular").value.trim(),
-        contrasenia: document.getElementById("contrasenia").value.trim(),
-        rol: "usuario"
-    };
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-    try {
-        const respuesta = await fetch("http://localhost:3000/usuarios", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(datos)
-        });
+        // ====== CAPTURAR DATOS DEL FORMULARIO ======
+        const nombre = document.getElementById("nombre").value.trim();
+        const correo = document.getElementById("correo").value.trim();
+        const usuario = document.getElementById("usuario").value.trim();
+        const cedula = document.getElementById("cedula").value.trim();
+        const celular = document.getElementById("celular").value.trim();
+        const contrasenia = document.getElementById("contrasenia").value.trim();
+        const nivel = document.getElementById("nivel").value;
 
-        const resultado = await respuesta.json();
+        // Intereses (checkboxes)
+        const intereses = [...document.querySelectorAll(".interes:checked")].map(i => i.value);
 
-        if (respuesta.ok) {
-            document.getElementById("mensaje-registro").innerHTML = `
-                <div class="alert alert-success">
-                    Registro completado con éxito. Ahora puedes iniciar sesión.
-                </div>
-            `;
+        // ====== OBJETO QUE SE ENVIARÁ ======
+        const nuevoUsuario = {
+            nombre,
+            correo,
+            usuario,
+            cedula,
+            celular,
+            contrasenia,
+            intereses,
+            nivel
+        };
 
-            // Limpiar formulario
-            document.getElementById("formRegistro").reset();
+        console.log("ENVIANDO:", nuevoUsuario);
 
-        } else {
-            document.getElementById("mensaje-registro").innerHTML = `
-                <div class="alert alert-danger">
-                    ${resultado.mensaje || "No se pudo registrar el usuario."}
-                </div>
-            `;
+        try {
+            const res = await fetch(`${API_URL}/usuarios/registrar`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(nuevoUsuario)
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                mensaje.style.color = "red";
+                mensaje.textContent = data.message || "Error al registrar usuario";
+                mensaje.style.display = "block";
+                return;
+            }
+
+            // ====== REGISTRO EXITOSO ======
+            mensaje.style.color = "green";
+            mensaje.textContent = "Usuario registrado correctamente";
+            mensaje.style.display = "block";
+
+            // Redirigir después de 1.5s
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 1500);
+
+        } catch (error) {
+            console.error("Error:", error);
+            mensaje.style.color = "red";
+            mensaje.textContent = "Error de conexión con el servidor.";
+            mensaje.style.display = "block";
         }
-    } catch (error) {
-        document.getElementById("mensaje-registro").innerHTML = `
-            <div class="alert alert-danger">
-                Error al conectar con el servidor.
-            </div>
-        `;
-    }
+    });
 });

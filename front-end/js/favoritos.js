@@ -1,37 +1,41 @@
-/* ============================================
-   RECETAS FAVORITAS
-   – Usa el usuario guardado en localStorage
-   – Consulta sus recetas favoritas al backend
-============================================ */
+const API_URL = "http://localhost:3000";
+
+/* ============================================================
+   CARGAR FAVORITOS
+============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+    cargarFavoritos();
+});
 
 async function cargarFavoritos() {
-    const contenedor = document.getElementById("contenedor-favoritos");
-    const mensaje = document.getElementById("mensaje-favoritos");
-
+    const contenedor = document.getElementById("listaFavoritos");
     contenedor.innerHTML = "";
-    mensaje.innerHTML = "";
 
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    const usuario = JSON.parse(sessionStorage.getItem("usuario"));
 
     if (!usuario) {
-        mensaje.innerHTML = `
-            <div class="alert alert-warning">
-                Debe iniciar sesión para ver sus recetas favoritas.
+        contenedor.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-warning text-center">
+                    Debe iniciar sesión para ver sus recetas favoritas.
+                </div>
             </div>
         `;
         return;
     }
 
     try {
-        const respuesta = await fetch(`http://localhost:3000/usuarios/${usuario.id}`);
-        const datos = await respuesta.json();
+        const respuesta = await fetch(`${API_URL}/usuarios/${usuario._id}`);
+        const data = await respuesta.json();
 
-        const favoritos = datos.favoritos || [];
+        const favoritos = data.favoritos || [];
 
-        if (!favoritos.length) {
-            mensaje.innerHTML = `
-                <div class="alert alert-info">
-                    Aún no tiene recetas marcadas como favoritas.
+        if (favoritos.length === 0) {
+            contenedor.innerHTML = `
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        Aún no tiene recetas marcadas como favoritas.
+                    </div>
                 </div>
             `;
             return;
@@ -39,23 +43,27 @@ async function cargarFavoritos() {
 
         favoritos.forEach(receta => {
             const col = document.createElement("div");
-            col.classList.add("col-12", "col-sm-6", "col-lg-4");
+            col.classList.add("col-md-4");
 
-            const imagen = receta.imagenPrincipal
-                ? `http://localhost:3000${receta.imagenPrincipal}`
-                : "/imgs/default-recipe.jpg";
+            const imagen = receta.fotoPrincipal
+                ? `${API_URL}/${receta.fotoPrincipal.replace(/\\/g, "/")}`
+                : "imgs/default.jpg";
 
             col.innerHTML = `
-                <div class="card shadow-sm h-100">
-                    <img src="${imagen}" class="card-img-top fixed-img" alt="${receta.titulo}">
+                <div class="card h-100 shadow-sm">
+                    <img src="${imagen}" class="card-img-top"
+                        style="height: 200px; object-fit: cover;" alt="${receta.titulo}">
+                    
                     <div class="card-body">
-                        <h5 class="card-title text-dark">${receta.titulo}</h5>
-                        <p class="card-text text-muted small">
-                            ${receta.descripcion ? receta.descripcion.substring(0, 90) + "..." : ""}
+                        <h5 class="card-title">${receta.titulo}</h5>
+
+                        <p class="text-muted small">
+                            ${receta.categoria} · ${receta.complejidad}
                         </p>
-                        <a href="/front-end/detalle-receta.html?id=${receta._id}" class="btn btn-vino btn-sm mt-2">
-                            Ver detalles
-                        </a>
+
+                        <button class="btn btn-vino w-100" onclick="verDetalle('${receta._id}')">
+                            Ver receta
+                        </button>
                     </div>
                 </div>
             `;
@@ -65,12 +73,19 @@ async function cargarFavoritos() {
 
     } catch (error) {
         console.error("Error al cargar favoritos:", error);
-        mensaje.innerHTML = `
-            <div class="alert alert-danger">
-                Ocurrió un error al cargar sus recetas favoritas.
+        contenedor.innerHTML = `
+            <div class="col-12">
+                <div class="alert alert-danger text-center">
+                    Error al cargar recetas favoritas.
+                </div>
             </div>
         `;
     }
 }
 
-document.addEventListener("DOMContentLoaded", cargarFavoritos);
+/* ============================================================
+   IR AL DETALLE
+============================================================ */
+function verDetalle(id) {
+    window.location.href = `detalle-receta.html?id=${id}`;
+}
