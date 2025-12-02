@@ -1,267 +1,143 @@
 // /front-end/js/registrar-receta.js
 
-const API_BASE = "http://localhost:3000";
-
-/// =====================================
-///  Obtener usuario actual (login.js)
-/// =====================================
+// 🧠 Función auxiliar para obtener el usuario logueado
 function obtenerUsuarioActual() {
-  let usuario = null;
-
-  const storedSession = sessionStorage.getItem("usuario");
-  const storedLocal = localStorage.getItem("usuario");
+  const uStr = sessionStorage.getItem("usuario") || localStorage.getItem("usuario");
+  if (!uStr) return null;
 
   try {
-    if (storedSession) usuario = JSON.parse(storedSession);
-    else if (storedLocal) usuario = JSON.parse(storedLocal);
-  } catch (e) {
-    console.warn("No se pudo parsear el usuario almacenado:", e);
+    return JSON.parse(uStr);
+  } catch {
+    return null;
   }
-
-  return usuario;
 }
 
-/// =====================================
-///  DOM listo
-/// =====================================
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("👉 registrar-receta.js cargado");
+  const form = document.getElementById("formReceta");
+  if (!form) return;
 
+  // 1️⃣ Verificar usuario logueado apenas carga la página
   const usuario = obtenerUsuarioActual();
-
-  // Si no hay usuario, que vaya a login
   if (!usuario) {
     alert("Debes iniciar sesión para registrar una receta.");
     window.location.href = "/front-end/login.html";
     return;
   }
 
-  const form = document.getElementById("formReceta");
-  const contIng = document.getElementById("contenedorIngredientes");
-  const contPasos = document.getElementById("contenedorPasos");
-  const btnAgregarIng = document.getElementById("btnAgregarIngrediente");
-  const btnAgregarPaso = document.getElementById("btnAgregarPaso");
-  const mensajeBox = document.getElementById("mensaje-receta");
-
-  /// =========================
-  ///  Agregar nuevo ingrediente
-  /// =========================
-  btnAgregarIng.addEventListener("click", () => {
-    const fila = document.createElement("div");
-    fila.classList.add("row", "g-2", "mb-2", "ingrediente-item");
-
-    fila.innerHTML = `
-      <div class="col-12 col-md-5">
-        <input
-          type="text"
-          class="form-control input-custom ingrediente-nombre"
-          placeholder="Ingrediente"
-          required
-        >
-      </div>
-
-      <div class="col-12 col-md-3">
-        <input
-          type="number"
-          class="form-control input-custom ingrediente-cantidad"
-          placeholder="Cantidad"
-          min="0"
-          step="0.01"
-          required
-        >
-      </div>
-
-      <div class="col-12 col-md-3">
-        <select class="form-select input-custom ingrediente-unidad" required>
-          <option value="">Unidad</option>
-          <option value="g">g</option>
-          <option value="kg">kg</option>
-          <option value="ml">ml</option>
-          <option value="l">l</option>
-          <option value="cucharadita">Cucharadita</option>
-          <option value="cucharada">Cucharada</option>
-          <option value="taza">Taza</option>
-          <option value="unidad">Unidad</option>
-        </select>
-      </div>
-
-      <div class="col-12 col-md-1 d-flex align-items-center">
-        <button type="button" class="btn btn-sm btn-outline-danger btn-eliminar-ing">
-          X
-        </button>
-      </div>
-    `;
-
-    contIng.appendChild(fila);
-
-    // Botón para eliminar ese ingrediente
-    const btnEliminar = fila.querySelector(".btn-eliminar-ing");
-    btnEliminar.addEventListener("click", () => fila.remove());
-  });
-
-  /// =========================
-  ///  Agregar nuevo paso
-  /// =========================
-  btnAgregarPaso.addEventListener("click", () => {
-    const div = document.createElement("div");
-    div.classList.add("mb-3", "paso-item");
-
-    div.innerHTML = `
-      <textarea
-        class="form-control input-custom paso-instruccion"
-        placeholder="Describa el paso"
-        required
-      ></textarea>
-      <input
-        type="file"
-        accept="video/*"
-        class="form-control mt-2 paso-video"
-      >
-      <button type="button" class="btn btn-sm btn-outline-danger mt-2 btn-eliminar-paso">
-        Eliminar paso
-      </button>
-    `;
-
-    contPasos.appendChild(div);
-
-    // Botón para eliminar ese paso
-    const btnEliminarPaso = div.querySelector(".btn-eliminar-paso");
-    btnEliminarPaso.addEventListener("click", () => div.remove());
-  });
-
-  /// =========================
-  ///  Enviar receta al backend
-  /// =========================
+  // 2️⃣ Manejar envío del formulario
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    if (mensajeBox) mensajeBox.innerHTML = "";
 
-    // ID del autor (usuario logueado)
-    const autorId = usuario.id || usuario._id;
-
-    if (!autorId) {
-      alert("Debes iniciar sesión para registrar una receta.");
+    const usuarioActual = obtenerUsuarioActual();
+    if (!usuarioActual) {
+      alert("La sesión expiró. Inicia sesión de nuevo.");
       window.location.href = "/front-end/login.html";
       return;
     }
 
-    // Campos básicos
+    const autorId = usuarioActual.id; // 🔑 id que viene del backend
+
+    // 🌮 Campos básicos
     const titulo = document.getElementById("nombreReceta").value.trim();
-    const categoria = document.getElementById("categoria").value.trim(); // se mapeará a 'tipo'
-    const ocasion = document.getElementById("ocasion")?.value.trim() || "";
-    const descripcion =
-      document.getElementById("descripcionReceta")?.value.trim() || "";
+    const categoriaSelect = document.getElementById("categoria");
+    const categoria = categoriaSelect ? categoriaSelect.value : "";
 
-    const tiempoPreparacion = parseInt(
-      document.getElementById("tiempoPreparacion")?.value || "0",
-      10
-    );
-    const presupuestoPorPorcion = parseFloat(
-      document.getElementById("presupuestoPorPorcion")?.value || "0"
-    );
-    const porciones = parseInt(
-      document.getElementById("porciones")?.value || "0",
-      10
-    );
+    // Descripción (si existe el campo en el HTML)
+    const descInput = document.getElementById("descripcionReceta");
+    const descripcion = descInput ? descInput.value.trim() : "";
 
-    // Validación sencilla
-    if (!titulo || !categoria || !ocasion || !descripcion || !tiempoPreparacion) {
-      const msg = "Por favor completa título, categoría, ocasión, descripción y tiempo.";
-      if (mensajeBox) {
-        mensajeBox.innerHTML = `<div class="alert alert-danger">${msg}</div>`;
-      } else {
-        alert(msg);
-      }
+    // Ocasión (si existe el select en el HTML)
+    const ocasionSelect = document.getElementById("ocasion");
+    const ocasion = ocasionSelect ? ocasionSelect.value : "";
+
+    // Tiempo de preparación (minutos) – opcional
+    const tiempoInput = document.getElementById("tiempoPrep");
+    let tiempoPreparacionMin = null;
+    if (tiempoInput && tiempoInput.value !== "") {
+      tiempoPreparacionMin = Number(tiempoInput.value);
+    }
+
+    // Presupuesto por porción – opcional
+    const presupuestoInput = document.getElementById("presupuestoPorPorcion");
+    let presupuestoPorPorcion = null;
+    if (presupuestoInput && presupuestoInput.value !== "") {
+      presupuestoPorPorcion = Number(presupuestoInput.value);
+    }
+
+    // URL de imagen local (ej: "/imgs/mi-receta.jpg") – opcional
+    const imgInput = document.getElementById("imagenUrl");
+    const imagenUrl = imgInput ? imgInput.value.trim() : "";
+
+    // ✅ Validaciones mínimas de front
+    if (!titulo) {
+      alert("El título de la receta es obligatorio.");
       return;
     }
 
-    // Ingredientes
-    const ingredienteItems = document.querySelectorAll(
-      "#contenedorIngredientes .ingrediente-item"
-    );
+    // 🧂 Ingredientes
+    const ingredienteItems = document.querySelectorAll("#contenedorIngredientes .ingrediente-item");
     const ingredientes = [];
 
     ingredienteItems.forEach((item) => {
-      const nombreIng =
-        item.querySelector(".ingrediente-nombre")?.value.trim() ||
-        item.querySelector("input[placeholder='Ingrediente']")?.value.trim();
+      const nombreIng = item.querySelector("input[placeholder='Ingrediente']").value.trim();
+      const cantidad = item.querySelector("input[placeholder='Cantidad']").value.trim();
+      const unidad = item.querySelector("select").value;
 
-      const cantidadStr =
-        item.querySelector(".ingrediente-cantidad")?.value ||
-        item.querySelector("input[placeholder='Cantidad']")?.value;
-
-      const unidad =
-        item.querySelector(".ingrediente-unidad")?.value ||
-        item.querySelector("select")?.value;
-
-      if (nombreIng && cantidadStr && unidad) {
+      if (nombreIng) {
         ingredientes.push({
           nombre: nombreIng,
-          cantidad: parseFloat(cantidadStr),
-          unidad,
-          // costoEstimado: 0 // si luego se utiliza
+          cantidad: cantidad || "",
+          unidad: unidad || ""
         });
       }
     });
 
     if (ingredientes.length === 0) {
-      const msg = "Agrega al menos un ingrediente.";
-      if (mensajeBox) {
-        mensajeBox.innerHTML = `<div class="alert alert-danger">${msg}</div>`;
-      } else {
-        alert(msg);
-      }
+      alert("Debes agregar al menos un ingrediente.");
       return;
     }
 
-    // Pasos
+    // 👣 Pasos
     const pasoItems = document.querySelectorAll("#contenedorPasos .paso-item");
     const pasos = [];
 
     pasoItems.forEach((item) => {
-      const instruccion =
-        item.querySelector(".paso-instruccion")?.value.trim() ||
-        item.querySelector("textarea")?.value.trim();
-
-      if (instruccion) {
+      const textoPaso = item.querySelector("textarea").value.trim();
+      if (textoPaso) {
         pasos.push({
-          instruccion,
-          imagenUrl: "",
-          videoUrl: "" // por ahora no se suben videos, solo reservamos el campo
+          instruccion: textoPaso,
+          imagenUrl: "", // por ahora vacío
+          videoUrl: ""   // por ahora vacío
         });
       }
     });
 
     if (pasos.length === 0) {
-      const msg = "Agrega al menos un paso.";
-      if (mensajeBox) {
-        mensajeBox.innerHTML = `<div class="alert alert-danger">${msg}</div>`;
-      } else {
-        alert(msg);
-      }
+      alert("Debes agregar al menos un paso.");
       return;
     }
 
-    // Objeto que espera el backend según receta.route.js
+    // 🧾 Objeto que el backend espera (campos del modelo actual)
     const payload = {
       titulo,
       descripcion,
       ingredientes,
       pasos,
-      presupuestoPorPorcion: isNaN(presupuestoPorPorcion)
-        ? 0
-        : presupuestoPorPorcion,
-      tiempoPreparacionMin: tiempoPreparacion,
-      autorId,
-      tipo: categoria, // mapeamos categoría a 'tipo'
-      ocasion,
-      porciones: isNaN(porciones) ? undefined : porciones
+      presupuestoPorPorcion,
+      tiempoPreparacionMin,
+      autorId
     };
 
-    console.log("📤 Enviando receta al backend:", payload);
+    // 👇 Campos extra que HOY el modelo no tiene, pero los mandamos
+    // por si luego amplían el schema (no rompe nada, Mongoose los ignora si no existen)
+    payload.categoria = categoria;
+    payload.ocasion = ocasion;
+    payload.imagenUrl = imagenUrl;
+
+    console.log("Enviando receta:", payload);
 
     try {
-      const respuesta = await fetch(`${API_BASE}/recetas`, {
+      const respuesta = await fetch("http://localhost:3000/recetas", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -269,48 +145,67 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify(payload)
       });
 
-      const resultado = await respuesta.json();
-      console.log("📥 Respuesta backend:", resultado);
+      const resultado = await respuesta.json().catch(() => ({}));
 
       if (!respuesta.ok) {
-        const msg =
-          resultado.mensaje ||
-          resultado.mensajeError ||
-          "No se pudo registrar la receta.";
-        if (mensajeBox) {
-          mensajeBox.innerHTML = `<div class="alert alert-danger">${msg}</div>`;
-        } else {
-          alert(msg);
-        }
+        console.error("Error al registrar receta:", resultado);
+        alert(resultado.mensaje || resultado.mensajeError || "No se pudo registrar la receta.");
         return;
       }
 
-      // Éxito
-      const msgOk =
-        "Receta registrada correctamente. Queda pendiente de aprobación por el administrador.";
-      if (mensajeBox) {
-        mensajeBox.innerHTML = `<div class="alert alert-success">${msgOk}</div>`;
-      } else {
-        alert(msgOk);
-      }
-
-      // Limpiar formulario
+      alert("Receta registrada correctamente. Queda pendiente de aprobación por el administrador.");
       form.reset();
-      contIng.innerHTML = "";
-      contPasos.innerHTML = "";
 
-      // Volver a agregar un ingrediente y un paso base
-      btnAgregarIng.click();
-      btnAgregarPaso.click();
+      // Si quieres, aquí puedes redirigir
+      // window.location.href = "/front-end/pagina-principal.html";
 
     } catch (error) {
-      console.error("Error al guardar receta:", error);
-      const msg = "Error de conexión con el servidor.";
-      if (mensajeBox) {
-        mensajeBox.innerHTML = `<div class="alert alert-danger">${msg}</div>`;
-      } else {
-        alert(msg);
-      }
+      console.error("Error de conexión:", error);
+      alert("Error de conexión con el servidor.");
     }
   });
+
+  // ➕ Ingredientes dinámicos
+  const btnAgregarIngrediente = document.getElementById("btnAgregarIngrediente");
+  if (btnAgregarIngrediente) {
+    btnAgregarIngrediente.addEventListener("click", () => {
+      const cont = document.getElementById("contenedorIngredientes");
+      cont.insertAdjacentHTML("beforeend", `
+        <div class="row g-2 mb-2 ingrediente-item">
+          <div class="col-12 col-md-5">
+            <input type="text" class="form-control input-custom" placeholder="Ingrediente" required>
+          </div>
+          <div class="col-12 col-md-3">
+            <input type="number" class="form-control input-custom" placeholder="Cantidad" min="0" step="0.01" required>
+          </div>
+          <div class="col-12 col-md-3">
+            <select class="form-select input-custom" required>
+              <option value="" disabled selected>Unidad</option>
+              <option value="g">g</option>
+              <option value="kg">kg</option>
+              <option value="ml">ml</option>
+              <option value="l">l</option>
+              <option value="cucharadita">Cucharadita</option>
+              <option value="cucharada">Cucharada</option>
+              <option value="taza">Taza</option>
+              <option value="unidad">Unidad</option>
+            </select>
+          </div>
+        </div>
+      `);
+    });
+  }
+
+  // ➕ Pasos dinámicos
+  const btnAgregarPaso = document.getElementById("btnAgregarPaso");
+  if (btnAgregarPaso) {
+    btnAgregarPaso.addEventListener("click", () => {
+      const cont = document.getElementById("contenedorPasos");
+      cont.insertAdjacentHTML("beforeend", `
+        <div class="mb-3 paso-item">
+          <textarea class="form-control input-custom" placeholder="Describa el paso" required></textarea>
+        </div>
+      `);
+    });
+  }
 });
