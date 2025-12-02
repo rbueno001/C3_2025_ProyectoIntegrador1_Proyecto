@@ -20,13 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-        const respuesta = await fetch("http://localhost:3000/usuarios/validar-credenciales", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nombreUsuarioOCorreo, contrasenia })
-        });
+      const respuesta = await fetch("http://localhost:3000/usuarios/validar-credenciales", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombreUsuarioOCorreo, contrasenia })
+      });
 
-        const data = await respuesta.json();
+      const data = await respuesta.json();
 
       if (!respuesta.ok) {
         if (errorBox) {
@@ -35,18 +35,16 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           alert(data.mensaje || "Credenciales incorrectas");
         }
-        }
         return;
       }
 
-      // 👇 Guardamos el usuario en sessionStorage y localStorage
+      // Guardar usuario
       const usuarioStr = JSON.stringify(data.usuario);
       sessionStorage.setItem("usuario", usuarioStr);
       localStorage.setItem("usuario", usuarioStr);
 
-      // Redirigir al inicio
+      // Redirigir
       window.location.href = "/front-end/pagina-principal.html";
-
 
     } catch (error) {
       console.error("Error en login:", error);
