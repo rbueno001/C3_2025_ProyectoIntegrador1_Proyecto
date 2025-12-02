@@ -1,142 +1,115 @@
-// Ruta: Gestión de Recetas
 const express = require("express");
 const router = express.Router();
-
-// Modelos
 const Receta = require("../models/receta.model");
-const Usuario = require("../models/usuario.model");
+const upload = require("../middleware/multer");
+const path = require("path");
 
-/* ============================================================
-   GET — Obtener SOLO recetas aprobadas (público)
-   GET /recetas
-============================================================ */
-router.get("/", async (req, res) => {
+// Subida de archivos:
+// fotoPrincipal: 1 archivo
+// pasoMedia: múltiples (imagen o video)
+router.post(
+  "/",
+  upload.fields([
+    { name: "fotoPrincipal", maxCount: 1 },
+    { name: "pasoMedia", maxCount: 20 }
+  ]),
+  async (req, res) => {
     try {
-        const recetas = await Receta.find({ estado: "aprobada" })
-            .populate("autor", "nombre correo");
+      // Foto principal obligatoria
+      if (!req.files || !req.files.fotoPrincipal) {
+        return res.status(400).json({ mensaje: "La foto principal es obligatoria." });
+      }
 
-        res.json(recetas);
-    } catch (error) {
-        res.status(500).json({ mensajeError: error.message });
-    }
-});
+      const fotoPrincipalFile = req.files.fotoPrincipal[0];
 
-/* ============================================================
-   GET — Obtener receta por ID
-   GET /recetas/:id
-============================================================ */
-router.get("/:id", async (req, res) => {
-    try {
-        const receta = await Receta.findById(req.params.id)
-            .populate("autor", "nombre correo");
+      const {
+        titulo,
+        descripcion,
+        autorNombre,
+        tipo,
+        ocasion,
+        tiempoPreparacionMin,
+        presupuestoPorPorcion,
+        porciones,
+        autorId
+      } = req.body;
 
-        if (!receta) {
-            return res.status(404).json({ mensaje: "Receta no encontrada" });
-        }
+      // Validación básica
+      if (!titulo || !descripcion || !tipo || !autorId) {
+        return res.status(400).json({ mensaje: "Faltan datos obligatorios." });
+      }
 
-        res.json(receta);
-    } catch (error) {
-        res.status(500).json({ mensajeError: error.message });
-    }
-});
+      // Ingredientes
+      let ingredientes = [];
+      if (req.body.ingredientes) {
+        ingredientes = JSON.parse(req.body.ingredientes);
+      }
 
-/* ============================================================
-   POST — Crear receta (queda en pendiente)
-   POST /recetas
-============================================================ */
-router.post("/", async (req, res) => {
-    try {
-        const {
-            titulo,
-            descripcion,
-            ingredientes,
-            pasos,
-            presupuestoPorPorcion,
-            tiempoPreparacionMin,
-            autorId
-        } = req.body;
+      // Pasos
+      let pasos = [];
+      if (req.body.pasos) {
+        const pasosFront = JSON.parse(req.body.pasos);
+        const media = req.files.pasoMedia || [];
 
-        if (!titulo || !autorId) {
-            return res.status(400).json({
-                mensaje: "El título y el autor son obligatorios."
-            });
-        }
+        pasos = pasosFront.map((p, i) => {
+          let mediaUrl = "";
 
-        const autor = await Usuario.findById(autorId);
-        if (!autor) {
-            return res.status(404).json({ mensaje: "Autor no encontrado." });
-        }
+          if (p.mediaIndex !== null && media[p.mediaIndex]) {
+            mediaUrl = "/uploads/recetas/" + media[p.mediaIndex].filename;
+          }
 
-        const nuevaReceta = new Receta({
-            titulo,
-            descripcion,
-            ingredientes,
-            pasos,
-            presupuestoPorPorcion,
-            tiempoPreparacionMin,
-            autor: autorId, // Referencia al usuario
-            estado: "pendiente"
+          return {
+            instruccion: p.instruccion,
+            mediaUrl
+          };
         });
+      }
 
-        const recetaGuardada = await nuevaReceta.save();
+      const nuevaReceta = new Receta({
+        titulo,
+        autorNombre,
+        descripcion,
+        tipo,
+        ocasion,
+        tiempoPreparacionMin,
+        presupuestoPorPorcion,
+        porciones,
+        autorId,
+        fotoPrincipal: "/uploads/recetas/" + fotoPrincipalFile.filename,
+        ingredientes,
+        pasos
+      });
 
-        // Agregar receta al usuario
-        await Usuario.findByIdAndUpdate(autorId, {
-            $push: { recetas: recetaGuardada._id }
-        });
+      await nuevaReceta.save();
 
-        res.status(201).json({
-            mensaje: "Receta creada. Pendiente de aprobación.",
-            receta: recetaGuardada
-        });
+      res.status(201).json({ mensaje: "Receta registrada correctamente.", receta: nuevaReceta });
 
     } catch (error) {
-        res.status(500).json({ mensajeError: error.message });
+      console.error("Error guardando receta:", error);
+      res.status(500).json({ mensaje: "Error en el servidor.", error: error.message });
     }
-});
-
+  }
+);
 /* ============================================================
-   DELETE — Eliminar receta por ID
-   DELETE /recetas/:id
-============================================================ */
-router.delete("/:id", async (req, res) => {
-    try {
-        const receta = await Receta.findByIdAndDelete(req.params.id);
-        if (!receta) {
-            return res.status(404).json({ mensaje: "Receta no encontrada" });
-        }
-
-        // Quitar receta del usuario
-        await Usuario.findByIdAndUpdate(receta.autor, {
-            $pull: { recetas: receta._id }
-        });
-
-        res.json({ mensaje: "Receta eliminada correctamente" });
-
-    } catch (error) {
-        res.status(500).json({ mensajeError: error.message });
-    }
-});
-
-/* ============================================================
-   GET — Obtener todas las recetas pendientes (para ADMIN)
+   ADMIN – OBTENER RECETAS PENDIENTES
    GET /recetas/admin/pendientes
-   (como está montado en index.js: app.use("/recetas", recetaRoute);
-    la ruta completa es /recetas/admin/pendientes)
 ============================================================ */
 router.get("/admin/pendientes", async (req, res) => {
     try {
         const recetas = await Receta.find({ estado: "pendiente" })
-            .populate("autor", "nombre correo");
+            .populate("autorId", "nombre correo nombreUsuario");
 
-        res.json(recetas);
+        res.status(200).json(recetas);
     } catch (error) {
-        res.status(500).json({ mensajeError: error.message });
+        res.status(500).json({
+            mensaje: "Error al obtener recetas pendientes",
+            error: error.message
+        });
     }
 });
 
 /* ============================================================
-   PUT — Aprobar receta
+   ADMIN – APROBAR RECETA
    PUT /recetas/admin/:id/aprobar
 ============================================================ */
 router.put("/admin/:id/aprobar", async (req, res) => {
@@ -148,18 +121,24 @@ router.put("/admin/:id/aprobar", async (req, res) => {
         );
 
         if (!receta) {
-            return res.status(404).json({ mensaje: "Receta no encontrada" });
+            return res.status(404).json({ mensaje: "Receta no encontrada." });
         }
 
-        res.json({ mensaje: "Receta aprobada", receta });
+        res.status(200).json({
+            mensaje: "Receta aprobada correctamente.",
+            receta
+        });
 
     } catch (error) {
-        res.status(500).json({ mensajeError: error.message });
+        res.status(500).json({
+            mensaje: "Error al aprobar receta",
+            error: error.message
+        });
     }
 });
 
 /* ============================================================
-   PUT — Rechazar receta
+   ADMIN – RECHAZAR RECETA
    PUT /recetas/admin/:id/rechazar
 ============================================================ */
 router.put("/admin/:id/rechazar", async (req, res) => {
@@ -171,100 +150,20 @@ router.put("/admin/:id/rechazar", async (req, res) => {
         );
 
         if (!receta) {
-            return res.status(404).json({ mensaje: "Receta no encontrada" });
-        }
-
-        res.json({ mensaje: "Receta rechazada", receta });
-
-    } catch (error) {
-        res.status(500).json({ mensajeError: error.message });
-    }
-});
-
-/* ============================================================
-   PUT — Dar like a una receta
-   PUT /recetas/:id/like
-   Body esperado: { usuarioId: "..." }
-============================================================ */
-router.put("/:id/like", async (req, res) => {
-    try {
-        const { usuarioId } = req.body;
-
-        if (!usuarioId) {
-            return res.status(400).json({ mensaje: "Falta usuarioId en el body." });
-        }
-
-        const receta = await Receta.findById(req.params.id);
-        if (!receta) {
             return res.status(404).json({ mensaje: "Receta no encontrada." });
         }
 
-        // Verificar si ya dio like
-        const yaDioLike = receta.likes?.some(
-            (id) => id.toString() === usuarioId
-        );
-
-        if (yaDioLike) {
-            return res.status(200).json({
-                mensaje: "El usuario ya había dado like.",
-                likes: receta.likes.length
-            });
-        }
-
-        receta.likes.push(usuarioId);
-        await receta.save();
-
         res.status(200).json({
-            mensaje: "Like agregado correctamente.",
-            likes: receta.likes.length
+            mensaje: "Receta rechazada correctamente.",
+            receta
         });
 
     } catch (error) {
-        console.error("Error al dar like:", error);
-        res.status(500).json({ mensajeError: error.message });
-    }
-});
-
-/* ============================================================
-   PUT — Quitar like a una receta
-   PUT /recetas/:id/unlike
-   Body esperado: { usuarioId: "..." }
-============================================================ */
-router.put("/:id/unlike", async (req, res) => {
-    try {
-        const { usuarioId } = req.body;
-
-        if (!usuarioId) {
-            return res.status(400).json({ mensaje: "Falta usuarioId en el body." });
-        }
-
-        const receta = await Receta.findById(req.params.id);
-        if (!receta) {
-            return res.status(404).json({ mensaje: "Receta no encontrada." });
-        }
-
-        const likesAntes = receta.likes.length;
-
-        receta.likes = receta.likes.filter(
-            (id) => id.toString() !== usuarioId
-        );
-
-        const likesDespues = receta.likes.length;
-
-        if (likesAntes !== likesDespues) {
-            await receta.save();
-        }
-
-        res.status(200).json({
-            mensaje: "Like removido correctamente.",
-            likes: receta.likes.length
+        res.status(500).json({
+            mensaje: "Error al rechazar receta",
+            error: error.message
         });
-
-    } catch (error) {
-        console.error("Error al quitar like:", error);
-        res.status(500).json({ mensajeError: error.message });
     }
 });
 
 module.exports = router;
-

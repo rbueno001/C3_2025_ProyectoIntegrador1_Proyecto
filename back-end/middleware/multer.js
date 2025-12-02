@@ -1,35 +1,31 @@
+// Middleware para subir imágenes y videos de recetas
+
 const multer = require("multer");
 const path = require("path");
 
-const storagePasos = multer.diskStorage({
-    destination: function (req, file, cb) {
-        if (file.mimetype.startsWith("image")) {
-            cb(null, "uploads/pasos/imagenes");
-        } else if (file.mimetype.startsWith("video")) {
-            cb(null, "uploads/pasos/videos");
-        } else {
-            cb(new Error("Tipo de archivo no soportado"), null);
-        }
-    },
-    filename: function (req, file, cb) {
-        const extension = path.extname(file.originalname);
-        const nombre = Date.now() + "-" + Math.round(Math.random() * 1e9) + extension;
-        cb(null, nombre);
-    }
+// Carpeta de archivos
+const destino = path.join(__dirname, "..", "uploads", "recetas");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, destino),
+
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const name = Date.now() + "_" + file.fieldname + ext;
+    cb(null, name);
+  }
 });
 
-function fileFilter(req, file, cb) {
-    if (file.mimetype.startsWith("image") || file.mimetype.startsWith("video")) {
-        cb(null, true);
-    } else {
-        cb(new Error("Solo se permiten imágenes y videos"), false);
-    }
+// Solo imágenes o videos
+function filtro(req, file, cb) {
+  const tipos = ["image/", "video/"];
+  if (tipos.some(t => file.mimetype.startsWith(t))) cb(null, true);
+  else cb(new Error("Tipo de archivo no permitido."), false);
 }
 
-const uploadPasos = multer({
-    storage: storagePasos,
-    fileFilter: fileFilter,
-    limits: { fileSize: 150 * 1024 * 1024 }
+const upload = multer({
+  storage,
+  fileFilter: filtro
 });
 
-module.exports = { uploadPasos };
+module.exports = upload;

@@ -16,7 +16,9 @@ router.post("/", async (req, res) => {
             cedula,
             celular,
             contrasenia,
-            rol
+            rol,
+            intereses,
+            nivel
         } = req.body;
 
         // Validación básica
@@ -24,16 +26,12 @@ router.post("/", async (req, res) => {
             return res.status(400).json({ mensaje: "Todos los campos son obligatorios." });
         }
 
-        // Verificar correo o cedula repetidos
+        // Validación de duplicados
         const existeCorreo = await Usuario.findOne({ correo });
-        if (existeCorreo) {
-            return res.status(400).json({ mensaje: "El correo ya está registrado." });
-        }
+        if (existeCorreo) return res.status(400).json({ mensaje: "El correo ya está registrado." });
 
         const existeCedula = await Usuario.findOne({ cedula });
-        if (existeCedula) {
-            return res.status(400).json({ mensaje: "La cédula ya está registrada." });
-        }
+        if (existeCedula) return res.status(400).json({ mensaje: "La cédula ya está registrada." });
 
         const existeUsuario = await Usuario.findOne({ nombreUsuario });
         if (existeUsuario) {
@@ -50,7 +48,9 @@ router.post("/", async (req, res) => {
             cedula,
             celular,
             contrasenia: contraseniaEncriptada,
-            rol: rol || "usuario",
+            rol: rol || "usuario",  // usuario por defecto
+            intereses: intereses || [],
+            nivel: nivel || "Principiante",
             recetas: []
         });
 
@@ -65,7 +65,9 @@ router.post("/", async (req, res) => {
                 nombreUsuario: nuevoUsuario.nombreUsuario,
                 cedula: nuevoUsuario.cedula,
                 celular: nuevoUsuario.celular,
-                rol: nuevoUsuario.rol
+                rol: nuevoUsuario.rol,
+                intereses: nuevoUsuario.intereses,
+                nivel: nuevoUsuario.nivel
             }
         });
 
@@ -121,6 +123,8 @@ router.post("/validar-credenciales", async (req, res) => {
             celular: usuario.celular,
             nombreUsuario: usuario.nombreUsuario,
             rol: usuario.rol,
+            intereses: usuario.intereses,
+            nivel: usuario.nivel,
             recetas: usuario.recetas
         };
 

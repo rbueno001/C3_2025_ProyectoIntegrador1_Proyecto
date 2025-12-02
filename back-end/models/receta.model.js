@@ -1,76 +1,39 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-// Subdocumento para ingredientes
-const ingredienteSchema = new mongoose.Schema({
-    nombre: String,
-    cantidad: String,      // Mongoose va a convertir el número que mandamos a string sin problemas
-    unidad: String,
-    costoEstimado: Number  // opcional, por si luego calculan costos
-});
-
-// Subdocumento para pasos
 const pasoSchema = new mongoose.Schema({
-    instruccion: String,
-    imagenUrl: String,
-    videoUrl: String
+  instruccion: { type: String, required: true },
+  mediaUrl: { type: String, default: "" }   // imagen o video opcional
 });
 
-// Esquema principal de Receta
+const ingredienteSchema = new mongoose.Schema({
+  nombre: { type: String, required: true },
+  cantidad: { type: Number, required: true },
+  unidad: { type: String, required: true }
+});
+
 const recetaSchema = new mongoose.Schema({
-    titulo: {
-        type: String,
-        required: true
-    },
+  titulo: { type: String, required: true },
+  autorNombre: { type: String, default: "" },
+  descripcion: { type: String, required: true },
+  fotoPrincipal: { type: String, required: true },
+  tiempoPreparacionMin: { type: Number, default: 0 },
+  presupuestoPorPorcion: { type: Number, default: 0 },
 
-    descripcion: String,
+  tipo: { type: String, required: true },
+  ocasion: { type: String, default: "" },
+  porciones: { type: Number, default: 0 },
 
-    // Tipo / categoría (Pollo, Carne, Postres, etc.)
-    tipo: {
-        type: String
-    },
+  ingredientes: [ingredienteSchema],
+  pasos: [pasoSchema],
 
-    // Ocasión (Desayuno, Almuerzo, Cena, Fiestas, etc.)
-    ocasion: {
-        type: String
-    },
+  autorId: {
+    type: Schema.Types.ObjectId,
+    ref: "Usuario",
+    required: true
+  },
 
-    // Número de porciones
-    porciones: {
-        type: Number
-    },
-
-    ingredientes: [ingredienteSchema],
-    pasos: [pasoSchema],
-
-    presupuestoPorPorcion: Number,
-    tiempoPreparacionMin: Number,
-
-    // Usuario que creó la receta
-    autor: {
-        type: Schema.Types.ObjectId,
-        ref: "Usuario",
-        required: true
-    },
-
-    creadoEn: {
-        type: Date,
-        default: Date.now
-    },
-
-    // Estado para el flujo de aprobación por el admin
-    estado: {
-        type: String,
-        enum: ["pendiente", "aprobada", "rechazada"],
-        default: "pendiente"
-    },
-
-    // Usuarios que le han dado like
-    likes: [{
-        type: Schema.Types.ObjectId,
-        ref: "Usuario"
-    }]
+  aprobado: { type: Boolean, default: false }
 });
 
-const Receta = mongoose.model("Receta", recetaSchema);
-module.exports = Receta;
+module.exports = mongoose.model("Receta", recetaSchema);

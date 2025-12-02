@@ -28,11 +28,18 @@ const schemaUsuario = new mongoose.Schema({
         type: String,
         required: true
     },
+    intereses: {
+        type: [String],
+        required: false
+    },
+    nivelConocimiento: {
+        type: String,
+        required: false
+    },
     rol: {
         type: String,
         enum: ["chef", "usuario", "admin"],
-        default: "usuario",
-        required: true
+        default: "usuario"
     },
     recetas: [{
         type: Schema.Types.ObjectId,

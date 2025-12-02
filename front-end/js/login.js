@@ -1,4 +1,7 @@
 // /front-end/js/login.js
+/* ===========================================
+   LOGIN DE USUARIO
+=========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
   const formLogin = document.getElementById("formLogin");
@@ -7,14 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
   formLogin.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const nombreUsuarioOCorreo = document
-      .getElementById("nombreUsuarioOCorreo")
-      .value
-      .trim();
-    const contrasenia = document
-      .getElementById("contrasenia")
-      .value
-      .trim();
+    const nombreUsuarioOCorreo = document.getElementById("nombreUsuarioOCorreo").value.trim();
+    const contrasenia = document.getElementById("contrasenia").value.trim();
 
     const errorBox = document.getElementById("loginError");
     if (errorBox) {
@@ -23,13 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const respuesta = await fetch("http://localhost:3000/usuarios/validar-credenciales", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombreUsuarioOCorreo, contrasenia })
-      });
+        const respuesta = await fetch("http://localhost:3000/usuarios/validar-credenciales", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nombreUsuarioOCorreo, contrasenia })
+        });
 
-      const data = await respuesta.json();
+        const data = await respuesta.json();
 
       if (!respuesta.ok) {
         if (errorBox) {
@@ -37,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
           errorBox.classList.remove("d-none");
         } else {
           alert(data.mensaje || "Credenciales incorrectas");
+        }
         }
         return;
       }
@@ -48,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Redirigir al inicio
       window.location.href = "/front-end/pagina-principal.html";
+
 
     } catch (error) {
       console.error("Error en login:", error);

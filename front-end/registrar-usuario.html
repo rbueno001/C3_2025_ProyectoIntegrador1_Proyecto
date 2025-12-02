@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar usuario | Gastro Works</title>
 
+    <!-- BOOTSTRAP -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="/front-end/css/theme.css">
 </head>
 
@@ -15,63 +17,64 @@
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg bg-vino">
-  <div class="container">
+        <div class="container">
 
-    <!-- LOGO -->
-    <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
-      <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
-    </a>
+            <!-- LOGO -->
+            <a class="navbar-brand d-flex align-items-center" href="/front-end/pagina-principal.html">
+                <img src="/imgs/logo.png" alt="Gastro Works" class="logo-navbar">
+            </a>
 
-    <!-- BOTÓN RESPONSIVE -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-      data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-      aria-label="Mostrar menú">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+            <!-- BOTÓN RESPONSIVE -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Mostrar menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <!-- MENÚ -->
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav align-items-lg-center">
+            <!-- MENÚ -->
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-lg-center">
 
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/front-end/pagina-principal.html">Inicio</a>
-        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/front-end/pagina-principal.html">Inicio</a>
+                    </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="/front-end/buscar-recetas.html">Recetas</a>
-        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/front-end/buscar-recetas.html">Recetas</a>
+                    </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="#">Chefs</a>
-        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Chefs</a>
+                    </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="#">Sobre Nosotros</a>
-        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Sobre Nosotros</a>
+                    </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contacto</a>
-        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contacto</a>
+                    </li>
 
-        <!-- Botones de sesión -->
-        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-          <!-- Botón para NO logueados -->
-          <a id="nav-login" class="btn btn-sm btn-light rounded-pill fw-semibold"
-             href="/front-end/login.html">
-            Iniciar sesión
-          </a>
-          <!-- Botón para usuarios logueados (se muestra con auth.js) -->
-          <a id="nav-profile" class="btn btn-sm btn-light rounded-pill fw-semibold d-none"
-             href="/front-end/perfil.html">
-            Mi perfil
-          </a>
-        </li>
+                    <!-- Botones de sesión -->
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <!-- Botón para NO logueados -->
+                        <a id="nav-login" class="btn btn-sm btn-light rounded-pill fw-semibold"
+                            href="/front-end/login.html">
+                            Iniciar sesión
+                        </a>
 
-      </ul>
-    </div>
-  </div>
-</nav>
+                        <!-- Botón para logueados -->
+                        <a id="nav-profile" class="btn btn-sm btn-light rounded-pill fw-semibold d-none"
+                            href="/front-end/perfil.html">
+                            Mi perfil
+                        </a>
+                    </li>
 
+                </ul>
+            </div>
+
+        </div>
+    </nav>
 
     <!-- FORMULARIO -->
     <main class="flex-fill">
@@ -79,7 +82,8 @@
             <div class="registro-wrapper">
                 <div class="registro-card">
 
-                    <img src="/imgs/icono-usuario.png" class="logo-registro" alt="Perfil">
+                    <!-- ICONO PERFIL -->
+                    <img src="/imgs/default-user.png" class="logo-registro" alt="Perfil">
 
                     <h2 class="titulo-registro">¿Usuario nuevo?</h2>
 
@@ -115,7 +119,65 @@
                                 placeholder="Contraseña" required>
                         </div>
 
-                        <button type="submit" class="btn-vino-center">
+                        <!-- INTERESES CULINARIOS -->
+                        <h5 class="text-start mt-4 mb-2">Intereses culinarios</h5>
+                        <p class="text-start mb-3" style="font-size: 0.9rem; color:#555;">
+                            Selecciona al menos uno para ayudarte con recomendaciones.
+                        </p>
+
+                        <div class="row text-start">
+                            <div class="col-12 col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input interes" type="checkbox" value="Postres" id="intPostres">
+                                    <label class="form-check-label" for="intPostres">Postres</label>
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input interes" type="checkbox" value="Vegana" id="intVegana">
+                                    <label class="form-check-label" for="intVegana">Vegana</label>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input interes" type="checkbox" value="Comida rápida" id="intRapida">
+                                    <label class="form-check-label" for="intRapida">Comida rápida</label>
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input interes" type="checkbox" value="Internacional" id="intInternacional">
+                                    <label class="form-check-label" for="intInternacional">Internacional</label>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input interes" type="checkbox" value="Saludable" id="intSaludable">
+                                    <label class="form-check-label" for="intSaludable">Saludable</label>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input interes" type="checkbox" value="Bebidas" id="intBebidas">
+                                    <label class="form-check-label" for="intBebidas">Bebidas</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- NIVEL DE CONOCIMIENTO -->
+                        <h5 class="text-start mt-4 mb-2">Nivel de conocimiento</h5>
+
+                        <select id="nivelConocimiento" class="form-control input-custom" required>
+                            <option value="" disabled selected>Selecciona una opción</option>
+                            <option value="Principiante">Principiante</option>
+                            <option value="Intermedio">Intermedio</option>
+                            <option value="Avanzado">Avanzado</option>
+                            <option value="Chef / Experto">Chef / Experto</option>
+                        </select>
+
+                        <!-- BOTÓN -->
+                        <button type="submit" class="btn-vino-center mt-4">
                             Registrar
                         </button>
 
@@ -123,7 +185,6 @@
                             ¿Ya tienes una cuenta?
                             <a href="/front-end/login.html" class="link-acceso">Entra aquí!</a>
                         </p>
-
                     </form>
 
                     <div id="mensaje-registro" class="mt-3"></div>
@@ -145,6 +206,7 @@
         </div>
     </footer>
 
+    <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/front-end/js/registrar-usuario.js"></script>
     <script src="/front-end/js/auth.js"></script>

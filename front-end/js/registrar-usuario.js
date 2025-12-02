@@ -1,12 +1,10 @@
 /* ============================================================
    REGISTRO DE USUARIOS
-   Envía los datos al backend para crear un nuevo usuario
 ============================================================ */
 
 document.getElementById("formRegistro").addEventListener("submit", async (evento) => {
     evento.preventDefault();
 
-    // Datos enviados al backend
     const datos = {
         nombre: document.getElementById("nombre").value.trim(),
         correo: document.getElementById("correo").value.trim(),
@@ -14,6 +12,8 @@ document.getElementById("formRegistro").addEventListener("submit", async (evento
         cedula: document.getElementById("cedula").value.trim(),
         celular: document.getElementById("celular").value.trim(),
         contrasenia: document.getElementById("contrasenia").value.trim(),
+        intereses: [...document.querySelectorAll(".interes:checked")].map(i => i.value),
+        nivelConocimiento: document.getElementById("nivelConocimiento").value,
         rol: "usuario"
     };
 
@@ -32,8 +32,6 @@ document.getElementById("formRegistro").addEventListener("submit", async (evento
                     Registro completado con éxito. Ahora puedes iniciar sesión.
                 </div>
             `;
-
-            // Limpiar formulario
             document.getElementById("formRegistro").reset();
 
         } else {
@@ -43,6 +41,7 @@ document.getElementById("formRegistro").addEventListener("submit", async (evento
                 </div>
             `;
         }
+
     } catch (error) {
         document.getElementById("mensaje-registro").innerHTML = `
             <div class="alert alert-danger">

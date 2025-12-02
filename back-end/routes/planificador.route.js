@@ -1,63 +1,61 @@
-// Ruta: Planificador Semanal
 const express = require("express");
 const router = express.Router();
+const Receta = require("../models/receta.model");  // ← CORREGIDO
+const Usuario = require("../models/usuario.model");
 
-// Modelo
-const Planificador = require("../models/planificador.model");
-
-// POST: Crear plan semanal
-router.post("/", async (req, res) => {
-    try {
-        const { usuarioId, semana, recetas } = req.body;
-
-        const nuevoPlan = new Planificador({
-            usuarioId,
-            semana,
-            recetas
-        });
-
-        await nuevoPlan.save();
-        res.status(201).json(nuevoPlan);
-    } catch (error) {
-        res.status(500).json({ mensajeError: error.message });
-    }
-});
-
-// GET: Obtener planificador de un usuario
+// ===========================================
+//   Obtener recetas de un usuario
+// ===========================================
 router.get("/:usuarioId", async (req, res) => {
     try {
-        const plan = await Planificador.find({
-            usuarioId: req.params.usuarioId
-        }).populate("recetas");
+        const usuarioId = req.params.usuarioId;
 
-        res.json(plan);
+        const recetas = await Receta.find({ autorId: usuarioId });
+
+        res.status(200).json(recetas);
     } catch (error) {
-        res.status(500).json({ mensajeError: error.message });
+        res.status(500).json({
+            mensaje: "Error al obtener las recetas del usuario",
+            error: error.message
+        });
     }
 });
 
-// PUT: Actualizar planificador por ID
-router.put("/:id", async (req, res) => {
+// ===========================================
+//   Generar lista de compras (ingredientes únicos)
+// ===========================================
+router.post("/lista-compras", async (req, res) => {
     try {
-        const planActualizado = await Planificador.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true }
-        );
+        const { recetasSeleccionadas } = req.body;
 
-        res.json(planActualizado);
-    } catch (error) {
-        res.status(500).json({ mensajeError: error.message });
-    }
-});
+        if (!recetasSeleccionadas || recetasSeleccionadas.length === 0) {
+            return res.status(400).json({
+                mensaje: "Debe seleccionar al menos una receta."
+            });
+        }
 
-// DELETE: Eliminar planificador por ID
-router.delete("/:id", async (req, res) => {
-    try {
-        await Planificador.findByIdAndDelete(req.params.id);
-        res.json({ mensaje: "Planificador eliminado" });
+        const recetas = await Receta.find({
+            _id: { $in: recetasSeleccionadas }
+        });
+
+        let lista = [];
+
+        recetas.forEach(receta => {
+            receta.ingredientes.forEach(ing => {
+                lista.push({
+                    nombre: ing.nombre,
+                    cantidad: ing.cantidad,
+                    unidad: ing.unidad
+                });
+            });
+        });
+
+        res.status(200).json(lista);
     } catch (error) {
-        res.status(500).json({ mensajeError: error.message });
+        res.status(500).json({
+            mensaje: "Error al generar la lista de compras",
+            error: error.message
+        });
     }
 });
 
